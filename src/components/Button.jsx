@@ -1,10 +1,8 @@
-import React from 'react';
-import { Button } from '@mui/material';
 
-export default function ButtonComponent({ name, onClick, size }) {
+export default function ButtonComponent({ children, onClick, type = "button", className }) {
   return (
-    <Button variant="contained" onClick={onClick} size={size}>
-      {name}
-    </Button>
+    <button onClick={onClick} type={type} className={className}>
+      {children}
+    </button>
   );
 }
