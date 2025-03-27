@@ -18,9 +18,7 @@ export default function Login() {
   return (
     <div className="flex flex-col md:flex-row h-screen">
       <div className="flex-[1] md:flex-[2] bg-white p-6 sm:p-10 flex flex-col justify-center items-center text-center order-1 md:order-1">
-        <h1 className="hidden sm:block text-3xl text-neutral-700 sm:text-4xl font-semibold mb-4">
-          Welcome to Sirenta
-        </h1>
+        <h1 className="hidden sm:block text-3xl text-neutral-700 sm:text-4xl font-semibold mb-4">Welcome to Sirenta</h1>
         <img src={logo} alt="Sirenta Logo" className="w-[50%] sm:max-w-xs md:max-w-md lg:max-w-lg h-auto" />
       </div>
 
@@ -48,7 +46,8 @@ export default function Login() {
           />
           <ButtonComponent
             onClick={handleLogin}
-            className="py-2.5 px-5 text-sm font-medium text-white bg-orange-500 rounded-lg hover:bg-orange-700 hover:text-gray-300 focus:ring-4 focus:ring-white-100">
+            className="py-2.5 px-5 text-sm font-medium text-white bg-orange-500 rounded-lg hover:bg-orange-700 hover:text-gray-300 hover:cursor-pointer focus:ring-4 focus:ring-white-100"
+          >
             Login
           </ButtonComponent>
         </form>
