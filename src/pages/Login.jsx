@@ -22,7 +22,7 @@ export default function Login() {
         <img src={logo} alt="Sirenta Logo" className="w-[50%] sm:max-w-xs md:max-w-md lg:max-w-lg h-auto" />
       </div>
 
-      <div className="flex-[2] md:flex-[1] bg-neutral-700 border-l-8 border-orange-500 flex flex-col justify-center px-6 sm:px-10 py-10 gap-4 order-2 md:order-2">
+      <div className="flex-[2] md:flex-[1] bg-dark-lab2 border-l-8 border-orange-lab flex flex-col justify-center px-6 sm:px-10 py-10 gap-4 order-2 md:order-2">
         <h1 className="text-white text-xl sm:text-2xl font-medium">Sign in to Sirenta</h1>
         <Alert severity="info">Sign in with your i-Lab account</Alert>
         <form className="flex flex-col gap-6">
@@ -46,7 +46,7 @@ export default function Login() {
           />
           <ButtonComponent
             onClick={handleLogin}
-            className="py-2.5 px-5 text-sm font-medium text-white bg-orange-500 rounded-lg hover:bg-orange-700 hover:text-gray-300 hover:cursor-pointer focus:ring-4 focus:ring-white-100"
+            className="py-2.5 px-5 text-sm font-medium text-white bg-orange-lab rounded-lg hover:bg-red-lab hover:text-gray-300 hover:cursor-pointer focus:ring-4 focus:ring-white-100"
           >
             Login
           </ButtonComponent>
