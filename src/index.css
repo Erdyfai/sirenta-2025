@@ -2,3 +2,15 @@
 @plugin "daisyui" {
   themes: light --default, dark --prefersdark, cupcake;
 }
+
+@theme {
+  --font-display: 'Public Sans', sans-serif;
+  --color-orange-lab: #f04d32;
+  --color-red-lab: #b71833;
+  --color-dark-lab1: #161c24;
+  --color-dark-lab2: #1f2531;
+}
+
+body {
+  font-family: var(--font-display);
+}
