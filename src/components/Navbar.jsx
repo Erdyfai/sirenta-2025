@@ -1,4 +1,6 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
+import logo from '../assets/logo-sirenta.png';
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
@@ -8,34 +10,33 @@ export default function Navbar() {
   };
 
   return (
-    <div className="container mx-auto w-full">
+    <div className="relative w-full"> {/* Tambahkan relative */}
       {/* Navbar desktop */}
-      <div className="navbar bg-base-100 shadow-sm md:px-12">
+      <div className="navbar bg-base-100 shadow-sm md:px-16 md:py-6 md:fixed md:w-full md:top-0 md:left-0 z-50">
         <div className="flex-1">
-          <a className="btn btn-ghost text-xl">Sirenta</a>
+          <Link to="/participant/dashboard" className="flex items-center">
+            <img src={logo} alt="Sirenta Logo" className="h-16 w-auto" /> 
+          </Link>
         </div>
 
         <div className="hidden md:flex flex-none justify-center items-center">
-          <ul className="menu menu-horizontal px-5">
+          <ul className="menu menu-horizontal px-8">
             <li>
-              <a href="">Beranda</a>
+              <Link to="/participant/dashboard">Beranda</Link>
             </li>
             <li>
-              <a href="">FAQ</a>
+              <Link to="/participant/faq">FAQ</Link>
             </li>
           </ul>
           <div className="dropdown dropdown-end">
             <div tabIndex={0} role="button" className="btn btn-ghost btn-circle avatar">
-              <div className="w-10 rounded-full">
-                <img alt="Tailwind CSS Navbar component" src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" />
+              <div className="w-12 rounded-full">
+                <img alt="User Avatar" src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" />
               </div>
             </div>
             <ul tabIndex={0} className="menu menu-sm dropdown-content bg-base-200 rounded-box z-10 mt-3 w-max p-2 shadow">
               <li>
-                <a className="justify-between">Profile</a>
-              </li>
-              <li>
-                <a>Logout</a>
+                <Link to="/">Logout</Link>
               </li>
             </ul>
           </div>
@@ -47,6 +48,7 @@ export default function Navbar() {
           </svg>
         </button>
       </div>
+
       {/* Navbar mobile */}
       <div
         className={`fixed top-0 left-0 h-full w-64 bg-base-200 shadow-lg transform ${
@@ -61,16 +63,13 @@ export default function Navbar() {
 
         <ul className="menu p-4">
           <li>
-            <a href="">Beranda</a>
+            <Link to="/participant/dashboard" onClick={toggleSidebar}>Beranda</Link>
           </li>
           <li>
-            <a href="">FAQ</a>
+            <Link to="/participant/faq" onClick={toggleSidebar}>FAQ</Link>
           </li>
           <li>
-            <a href="">Profile</a>
-          </li>
-          <li>
-            <a href="">Logout</a>
+            <Link to="/" onClick={toggleSidebar}>Logout</Link>
           </li>
         </ul>
       </div>
