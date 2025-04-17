@@ -5,7 +5,7 @@ export default function Faq() {
     <div className="">
       <Navbar />
       <div className="md:mt-24 flex-[1] md:flex-[2] bg-white p-6 sm:p-10 flex flex-col justify-center items-center text-center">
-            <h1 className="font-semibold mb-4">This is Admin Dashboard page</h1>
+            <h1 className="font-semibold mb-4 text-red-500">This is Admin Layanan Pengaduan page</h1>
       </div>
     </div>
   );
