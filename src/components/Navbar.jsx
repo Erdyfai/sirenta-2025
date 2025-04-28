@@ -4,7 +4,7 @@ import logo from '../assets/logo-sirenta.png';
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
-  const [role, setRole] = useState("admin"); 
+  const [role, setRole] = useState("participant"); 
 
   // Daftar menu berdasarkan role
   const menus = {
@@ -26,7 +26,7 @@ export default function Navbar() {
       {/* Navbar desktop */}
       <div className="navbar bg-base-100 shadow-sm md:px-16 md:py-6 md:fixed md:w-full md:top-0 md:left-0">
         <div className="flex-1">
-          <Link to="/" className="inline-block">
+          <Link to={currentMenu[0]?.path} className="inline-block">
             <img src={logo} alt="Sirenta Logo" className="h-16 w-auto" />
           </Link>
         </div>

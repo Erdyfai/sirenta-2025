@@ -15,6 +15,7 @@
     "@mui/material": "^6.4.7",
     "@tailwindcss/vite": "^4.0.17",
     "daisyui": "^5.0.9",
+    "lucide-react": "^0.501.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-router-dom": "^7.3.0"
