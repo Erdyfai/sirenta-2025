@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import timelineData from '../dummy/timelineData';
+import timelineData from '../mockdata/timelineData';
 import {
   Loader2,
   CheckCircle,
