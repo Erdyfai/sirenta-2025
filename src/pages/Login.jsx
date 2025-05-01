@@ -1,7 +1,5 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import InputField from '../components/InputField';
-import ButtonComponent from '../components/Button';
 import logo from '../assets/logo-sirenta.png';
 import Alert from '@mui/material/Alert';
 
@@ -26,7 +24,7 @@ export default function Login() {
         <h1 className="text-white text-xl sm:text-2xl font-medium">Sign in to Sirenta</h1>
         <Alert severity="info">Sign in with your i-Lab account</Alert>
         <form className="flex flex-col gap-6">
-          <InputField
+          <input
             id="username"
             placeholder="NIM/Username"
             type="text"
@@ -35,7 +33,7 @@ export default function Login() {
             onChange={(e) => setNIM(e.target.value)}
             className="bg-orange-50 appearance-none border-l-2 border-b-3 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-orange-500"
           />
-          <InputField
+          <input
             id="password"
             placeholder="Password"
             type="password"
@@ -44,12 +42,12 @@ export default function Login() {
             onChange={(e) => setPassword(e.target.value)}
             className="bg-orange-50 appearance-none border-l-2 border-b-3 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-orange-500"
           />
-          <ButtonComponent
+          <button
             onClick={handleLogin}
             className="py-2.5 px-5 text-sm font-medium text-white bg-orange-lab rounded-lg hover:bg-red-lab hover:text-gray-300 hover:cursor-pointer focus:ring-4 focus:ring-white-100"
           >
             Login
-          </ButtonComponent>
+          </button>
         </form>
       </div>
 
