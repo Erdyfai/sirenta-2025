@@ -7,6 +7,8 @@ import KelolaSesi from './pages/admin/KelolaSesi';
 import KoleksiSoal from './pages/admin/KoleksiSoal';
 import LayananPengaduan from './pages/admin/LayananPengaduan';
 import Error404 from './pages/errorpage/Error404';
+import Error500 from './pages/errorpage/Error500';
+import Pendaftaran from './pages/participant/Pendaftaran';
 
 export default function AppRoutes() {
   return (
@@ -15,11 +17,14 @@ export default function AppRoutes() {
         <Route path="/" element={<Login />} />
         <Route path="/participant/dashboard" element={<ParticipantDashboard />} />
         <Route path="/participant/faq" element={<Faq/>} />
+        <Route path="/participant/pendaftaran" element={<Pendaftaran/>} />
         <Route path="/admin/dashboard" element={<AdminDashboard />} />
         <Route path="/admin/kelola-sesi" element={<KelolaSesi/>} />
         <Route path="/admin/koleksi-soal" element={<KoleksiSoal />} />
         <Route path="/admin/layanan-pengaduan" element={<LayananPengaduan/>} />
+        <Route path="/error500" element={<Error500/>} />
         <Route path="*" element={<Error404/>} />
+       
       </Routes>
     </Router>
   );
