@@ -1,11 +1,51 @@
 import React from 'react';
+import Navbar from '../../components/Navbar';
 
 const RegisterForm = () => {
   return (
-    <div className="min-h-screen bg-gray-50 py-10 px-4">
-      <div className="max-w-3xl mx-auto bg-white shadow-md rounded-xl p-8">
-        <h1 className="text-3xl font-bold text-orange-600 mb-6">Sirent@</h1>
+    <div className="min-h-screen bg-gray-50 pt-35 py-10 px-4">
+      <Navbar></Navbar>
+      <div className="max-w-7xl mx-auto bg-white shadow-md rounded-xl p-8">
         <form className="space-y-6">
+          {/* Nama */}
+          <div>
+            <label htmlFor="nama" className="block font-semibold text-gray-700 mb-1">
+              Nama Lengkap
+            </label>
+            <input
+              type="text"
+              id="nama"
+              placeholder="nama lengkap"
+              className="w-full p-3 border border-gray-300 rounded-md bg-gray-100 focus:outline-none focus:ring-2 focus:ring-orange-400"
+              required
+            />
+          </div>
+          {/* NIM */}
+          <div>
+            <label htmlFor="nim" className="block font-semibold text-gray-700 mb-1">
+              Nomor Induk Mahasiswa
+            </label>
+            <input
+              type="tel"
+              id="nim"
+              placeholder="202xxxxxxxxxxxx"
+              className="w-full p-3 border border-gray-300 rounded-md bg-gray-100 focus:outline-none focus:ring-2 focus:ring-orange-400"
+              required
+            />
+          </div>
+            {/* Angkatan */}
+            <div>
+            <label htmlFor="angkatan" className="block font-semibold text-gray-700 mb-1">
+              Angkatan
+            </label>
+            <input
+              type="text"
+              id="angkatan"
+              placeholder="202x"
+              className="w-full p-3 border border-gray-300 rounded-md bg-gray-100 focus:outline-none focus:ring-2 focus:ring-orange-400"
+              required
+            />
+          </div>
           {/* Email */}
           <div>
             <label htmlFor="email" className="block font-semibold text-gray-700 mb-1">
@@ -80,20 +120,26 @@ const RegisterForm = () => {
           </div>
 
           {/* Upload File */}
-          <div>
-            <label htmlFor="file" className="block font-semibold text-gray-700 mb-1">
-              Lampiran .pdf (max. 1mb)
-            </label>
-            <a href="#" className="text-orange-500 text-sm underline mb-2 inline-block">
-              📄 Download Template CV
-            </a>
-            <input
-              type="file"
-              id="file"
-              accept=".pdf"
-              className="block mt-1"
-            />
+          <div className="mb-4">
+           <div className="flex items-center justify-between mb-2">
+            <label className="block font-semibold text-gray-700 mb-1">Lampiran .pdf (max. 1mb)</label>
           </div>
+          <a
+              href="/template-cv.pdf" 
+              download
+              className="text-orange-500 text-sm border border-orange-300 px-3 py-1 rounded hover:bg-orange-100"
+             >
+              📄 Download Template CV
+          </a>
+          <input
+            type="file"
+            id="file"
+            accept=".pdf"
+            className="block pt-5 w-full text-sm text-gray-700 file:mr-4 file:py-1 file:px-4
+                      file:rounded file:border-0 file:text-sm file:font-semibold
+                      file:bg-gray-100 file:text-gray-700 hover:file:bg-gray-200"
+          />
+        </div>
 
           {/* Tombol Daftar */}
           <div className="text-center">
