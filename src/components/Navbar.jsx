@@ -4,7 +4,7 @@ import logo from '../assets/logo-sirenta.png';
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
-  const [role, setRole] = useState('participant');
+  const [role, setRole] = useState('juri');
 
   // Daftar menu berdasarkan role
   const menus = {
@@ -16,6 +16,8 @@ export default function Navbar() {
       { name: 'Dashboard', path: '/admin/dashboard' },
       { name: 'Kelola Sesi', path: '/admin/kelola-sesi' },
     ],
+
+    juri: [{ name: 'Dashboard', path: '/juri/dashboard' }],
   };
 
   const currentMenu = menus[role] || [];
@@ -23,10 +25,10 @@ export default function Navbar() {
   return (
     <div className="container mx-auto w-full">
       {/* Navbar desktop */}
-      <div className="navbar bg-base-100 shadow-sm md:px-16 md:py-6 md:fixed md:w-full md:top-0 md:left-0">
+      <div className="fixed z-50 navbar bg-base-100 shadow-sm w-full top-0 left-0 px-4 py-3 md:px-16 md:py-4">
         <div className="flex-1">
           <Link to={currentMenu[0]?.path} className="inline-block">
-            <img src={logo} alt="Sirenta Logo" className="h-16 w-auto" />
+            <img src={logo} alt="Sirenta Logo" className="h-12 w-auto" />
           </Link>
         </div>
 
@@ -63,7 +65,7 @@ export default function Navbar() {
 
       {/* Navbar mobile */}
       <div
-        className={`fixed top-0 left-0 h-full w-64 bg-base-200 shadow-lg transform ${
+        className={`z-50 fixed top-0 left-0 h-full w-64 bg-base-200 shadow-lg transform ${
           open ? 'translate-x-0' : '-translate-x-full'
         } transition-transform duration-300 ease-in-out md:hidden`}
       >
