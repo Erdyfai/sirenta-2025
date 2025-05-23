@@ -1,5 +1,4 @@
-import React from 'react';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import Navbar from '../../components/Navbar';
 import Stat from '../../components/Stats';
 import statsData from '../../mockdata/statsdata';
@@ -21,6 +20,28 @@ export default function Dashboard() {
     setOpenModal(false);
     setSelected(null);
   };
+
+  const columns = [
+    { header: '#', render: (_, index) => index + 1 },
+    { header: 'NIM', accessor: 'nim' },
+    { header: 'Nama', accessor: 'name' },
+    { header: 'Motivasi', accessor: 'motivasi' },
+    { header: 'Catatan', accessor: 'catatan' },
+    { header: 'Nilai', accessor: 'nilai' },
+    {
+      header: 'Aksi',
+      render: (row) => (
+        <div className="flex gap-2">
+          <button className="btn btn-xs btn-soft btn-primary">Lihat CV</button>
+          <button onClick={() => handleInputNilai(row)} className="btn btn-xs btn-soft btn-secondary">
+            Input Nilai
+          </button>
+          <button className="btn btn-xs btn-soft btn-accent">Detail</button>
+        </div>
+      )
+    }
+  ];
+
   return (
     <div>
       <div className="min-h-screen w-[90%] mx-auto pt-28">
@@ -30,7 +51,7 @@ export default function Dashboard() {
           Welcome to the Juri Dashboard. Here you can manage the judging process and view participant submissions.
         </p>
         <Stat stats={statsData(isOpen)} />
-        <Table data={tableData} onInputNilai={handleInputNilai} />
+        <Table columns={columns} data={tableData} />
 
         <Modal isOpen={OpenModal} onClose={handleCloseModal} title={`Input Nilai  ${Selected?.name}`}>
           {Selected && (
@@ -51,12 +72,8 @@ export default function Dashboard() {
               </div>
 
               <div className="modal-action">
-                <button type="submit" className="btn btn-primary">
-                  Simpan
-                </button>
-                <button type="button" onClick={handleCloseModal} className="btn">
-                  Batal
-                </button>
+                <button type="submit" className="btn btn-primary">Simpan</button>
+                <button type="button" onClick={handleCloseModal} className="btn">Batal</button>
               </div>
             </form>
           )}
