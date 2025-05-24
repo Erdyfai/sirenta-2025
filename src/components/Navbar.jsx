@@ -4,7 +4,7 @@ import logo from '../assets/logo-sirenta.png';
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
-  const [role, setRole] = useState('juri');
+  const [role, setRole] = useState('admin');
 
   // Daftar menu berdasarkan role
   const menus = {
@@ -15,6 +15,7 @@ export default function Navbar() {
     admin: [
       { name: 'Dashboard', path: '/admin/dashboard' },
       { name: 'Kelola Sesi', path: '/admin/kelola-sesi' },
+      { name: 'Koleksi Sesi', path: '/admin/koleksi-soal' },
     ],
 
     juri: [{ name: 'Dashboard', path: '/juri/dashboard' }],
