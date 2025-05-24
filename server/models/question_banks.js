@@ -22,6 +22,14 @@ module.exports = function(sequelize, DataTypes) {
         model: 'users',
         key: 'id'
       }
+    },
+    started_at: {
+      type: DataTypes.DATE,
+      allowNull: true
+    },
+    duration: {
+      type: DataTypes.INTEGER,
+      allowNull: true
     }
   }, {
     sequelize,
