@@ -10,6 +10,7 @@ import Error404 from './pages/errorpage/Error404';
 import Error500 from './pages/errorpage/Error500';
 import Pendaftaran from './pages/participant/Pendaftaran';
 import Dashboard from './pages/juri/Dashboard';
+import KelolaSoal from './pages/admin/DaftarSoal';
 
 export default function AppRoutes() {
   return (
@@ -22,6 +23,7 @@ export default function AppRoutes() {
         <Route path="/admin/dashboard" element={<AdminDashboard />} />
         <Route path="/admin/kelola-sesi" element={<KelolaSesi />} />
         <Route path="/admin/koleksi-soal" element={<KoleksiSoal />} />
+        <Route path="/admin/koleksi-soal/daftar-soal" element={<KelolaSoal />} />
         <Route path="/admin/layanan-pengaduan" element={<LayananPengaduan />} />
         <Route path="/error500" element={<Error500 />} />
         <Route path="/juri/dashboard" element={<Dashboard />} />
