@@ -24,7 +24,7 @@ export default function Navbar() {
   const currentMenu = menus[role] || [];
 
   return (
-    <div className="container mx-auto w-full">
+    <div className="w-full">
       {/* Navbar desktop */}
       <div className="fixed z-50 navbar bg-base-100 shadow-sm w-full top-0 left-0 px-4 py-3 md:px-16 md:py-4">
         <div className="flex-1">
