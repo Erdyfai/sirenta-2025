@@ -5,8 +5,9 @@ import faqData from '../../mockdata/faqdata';
 export default function Faq() {
   return (
     <div>
+      <Navbar  />
       <div className="min-h-screen w-[90%] mx-auto pt-28">
-        <Navbar className />
+        
         <div className=" pb-6">
           <h4 className="font-semibold text-center">FAQ</h4>
         </div>

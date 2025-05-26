@@ -1,13 +1,31 @@
+import React from 'react';
+import Sidebar from '../../components/Sidebar';
 import Navbar from '../../components/Navbar';
+import DashboardContent from '../../components/DashboardContent';
 
-export default function Dashboard() {
+// import { Doughnut } from 'react-chartjs-2'; // Dihapus karena kesalahan kompilasi
+// import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js'; // Dihapus karena kesalahan kompilasi
+
+// Chart.js dan komponen Doughnut telah dihapus untuk mengatasi kesalahan kompilasi.
+// Jika Anda ingin menggunakan grafik, pastikan pustaka ini terinstal di lingkungan Anda.
+// ChartJS.register(ArcElement, Tooltip, Legend);
+
+/**
+ * Komponen utama aplikasi.
+ * Menggabungkan Sidebar, Header, dan DashboardContent.
+ */
+function Dashboard() {
   return (
-    <div className="">
-      <Navbar />
-        
-      <div className="md:mt-24 flex-[1] md:flex-[2] bg-base-100 p-6 sm:p-10 flex flex-col justify-center items-center text-center">
-            <h1 className="font-semibold mb-4">This is Admin Dashboard page</h1>
+    <div className="flex h-screen bg-gray-100 font-inter">
+      <Sidebar />
+      <div className="flex-1 flex flex-col overflow-hidden">
+        <Navbar />
+        <main className="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100 p-6">
+          <DashboardContent />
+        </main>
       </div>
     </div>
   );
 }
+
+export default Dashboard;

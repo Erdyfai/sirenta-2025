@@ -7,7 +7,7 @@ import { useState } from 'react';
 export default function Dashboard() {
   // State
   const [isSelectionOngoing, setIsSelectionOngoing] = useState(true); // true kalau seleksi masih jalan
-  const [isUserApplicant, setIsUserApplicant] = useState(false); // true kalau user adalah pendaftar
+  const [isUserApplicant, setIsUserApplicant] = useState(true); // true kalau user adalah pendaftar
 
   return (
     <div className="">
