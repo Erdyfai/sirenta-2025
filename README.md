@@ -1,12 +1,71 @@
-# React + Vite
+# 🚀 Petunjuk Setup Proyek dengan Docker + Sequelize (untuk Windows)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+---
+## Jalankan MySQL di Docker
+Buka **Command Prompt atau Git Bash**, lalu jalankan:
 
-Currently, two official plugins are available:
+```bash
+docker run -d --name mysql-sirenta -e MYSQL_ROOT_PASSWORD=root -p 3307:3306 mysql:latest
+```
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
+## Restore Database dari File Dump
+Simpan file **sirenta_dump.sql** dalam folder dan buka folder dalam **Command Prompt atau Git Bash**, lalu jalankan:
 
-## Expanding the ESLint configuration
+```bash
+docker cp sirenta_dump.sql mysql-sirenta:/sirenta_dump.sql
+```
+Lalu import dump ke database:
 
-If you are developing a production application, we recommend using TypeScript and enable type-aware lint rules. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+```bash
+docker exec -i mysql-sirenta sh -c "mysql -uroot -proot sirenta_db < /sirenta_dump.sql"
+```
+---
+## Cek Apakah Database Berhasil di Import
+Masuk ke MySQL di dalam container dengan menjalankan:
+
+```bash
+docker exec -it mysql-sirenta mysql -uroot -proot
+```
+
+Setelah berhasil masuk, prompt-nya akan menjadi seperti ini:
+
+```bash
+mysql>
+```
+Dalam prompt di atas, lihat daftar database dengan menggunakan perintah:
+
+```bash
+SHOW DATABASES;
+```
+Pastikan database **sirenta_db** muncul, lalu gunakan database tersebut:
+
+```bash
+USE sirenta_db;
+```
+Lalu tampilkan tabel:
+
+```bash
+SHOW TABLES;
+```
+Jika output muncul, maka file berhasil di-import.
+
+---
+## Menjalankan Migration dan Seeders
+Pastikan file **.env** telah dibuat dan buka **terminal/git bash** lalu pastikan direktori project seperti ini:
+
+```bash
+~/sirenta-2025/server$
+```
+Lalu jalankan migration:
+
+```bash
+npx sequelize-cli db:migrate
+```
+Lalu jalankan juga seeders:
+
+```bash
+npx sequelize-cli db:seed:all
+```
+
+---

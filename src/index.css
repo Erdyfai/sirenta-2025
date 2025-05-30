@@ -12,6 +12,15 @@
   --color-dark-lab2: #1f2531;
 }
 
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-4px); }
+  40%, 80% { transform: translateX(4px); }
+}
+.animate-shake {
+  animation: shake 0.3s ease;
+}
+
 body {
   font-family: var(--font-display);
 }
