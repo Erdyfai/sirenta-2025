@@ -4,7 +4,6 @@ const bcrypt = require("bcryptjs");
 
 const login = async (req, res) => {
   const { nim, password } = req.body;
-  console.log('User:', User);
 
   try {
     const user = await User.findOne({ where: { nim } }); 
@@ -22,11 +21,6 @@ const login = async (req, res) => {
 
     res.status(200).json({
       id: user.id,
-      name: user.name,
-      email: user.email,
-      nim: user.nim,
-      angkatan: user.angkatan,
-      gender: user.gender,
       role: user.role,
     });
   } catch (error) {

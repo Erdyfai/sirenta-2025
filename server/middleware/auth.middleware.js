@@ -1,11 +1,10 @@
 const jwt = require("jsonwebtoken");
-const { users: User } = require("../models");
 
 const protectRoute = (roles = []) => {
   return (req, res, next) => {
     try {
       const token = req.cookies.jwt;
-
+      
       if (!token) {
         return res.status(401).json({ message: "Not authorized, no token" });
       }
