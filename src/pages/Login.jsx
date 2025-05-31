@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect} from 'react';
 import { useNavigate } from 'react-router-dom';
 import logo from '../assets/logo-sirenta.png';
 import Alert from '@mui/material/Alert';
@@ -18,6 +18,21 @@ export default function Login() {
 
   const login = useAuthStore((state) => state.login);
   const isLoggingIn = useAuthStore((state) => state.isLoggingIn);
+  const authUser = useAuthStore((state => state.authUser));
+
+  useEffect(() => {
+    if (authUser) {
+
+      if (authUser?.role === 'participant') {
+        navigate('/participant/dashboard', { replace: true });
+      } else if (authUser?.role === 'admin') {
+        navigate('/admin/dashboard', { replace: true });
+      } else if (authUser?.role === 'jury') {
+        navigate('/juri/dashboard', { replace: true });
+      }
+
+    }
+  }, [authUser]);
 
   async function handleLogin(e) {
     e.preventDefault();
