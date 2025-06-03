@@ -18,26 +18,10 @@ export default function Login() {
 
   const login = useAuthStore((state) => state.login);
   const isLoggingIn = useAuthStore((state) => state.isLoggingIn);
-  const authUser = useAuthStore((state => state.authUser));
-
-  useEffect(() => {
-    if (authUser) {
-
-      if (authUser?.role === 'participant') {
-        navigate('/participant/dashboard', { replace: true });
-      } else if (authUser?.role === 'admin') {
-        navigate('/admin/dashboard', { replace: true });
-      } else if (authUser?.role === 'jury') {
-        navigate('/juri/dashboard', { replace: true });
-      }
-
-    }
-  }, [authUser]);
 
   async function handleLogin(e) {
     e.preventDefault();
 
-    // Reset errors
     setFormError({ nim: '', password: '', general: '' });
 
     let hasError = false;
@@ -137,8 +121,8 @@ export default function Login() {
         </form>
       </div>
 
-      <footer className="absolute bottom-2 w-full text-center text-sm text-gray-500">
-        © {new Date().getFullYear()} Sirenta. All rights reserved.
+      <footer className="absolute bottom-2 w-full text-sm text-gray-500">
+      Developed by Information System Division Infotech &copy; {new Date().getFullYear()} | Informatics Laboratory, University of Muhammadiyah Malang
       </footer>
     </div>
   );

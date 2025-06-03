@@ -1,4 +1,4 @@
-
+import Breadcrumbs from "./BreadCrumbs";
 
 /**
  * Komponen DashboardContent untuk menampilkan isi utama dashboard.
@@ -12,11 +12,7 @@ function DashboardContent() {
   return (
     <div className="font-inter pt-24">
       {/* Breadcrumbs */}
-      <div className="flex items-center text-sm text-gray-500 mb-6">
-        <span className="hover:text-blue-600 cursor-pointer transition-colors duration-200">Dashboard</span>
-        <svg className="w-3 h-3 mx-2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"></path></svg>
-        <span className="text-gray-700">Current</span>
-      </div>
+      <Breadcrumbs />
 
       {/* Bagian Daftar Sesi Recruitment Asisten */}
       <div className="bg-white shadow-md rounded-lg p-6 mb-6">
@@ -117,9 +113,9 @@ function DashboardContent() {
       </div>
 
       {/* Footer */}
-      <footer className="mt-8 text-sm text-gray-500 text-center border-t border-gray-200 pt-4">
-        Developed by Information System Division Infotech &copy; 2025 | Informatics Laboratory, University of Muhammadiyah Malang
-      </footer>
+        <footer className="mt-8 text-sm text-gray-500 text-center border-t border-gray-200 pt-4">
+          Developed by Information System Division Infotech &copy; {new Date().getFullYear()} | Informatics Laboratory, University of Muhammadiyah Malang
+        </footer>
     </div>
   );
 }

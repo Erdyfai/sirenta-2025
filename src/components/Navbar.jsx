@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import logo from '../assets/logo-sirenta.png';
 import { useAuthStore } from '../stores/useAuthStore';
 import LoadingSpinner from '../components/LoadingSpinner';
-import Modal from '../components/Modal'; // pastikan path sesuai
+import Modal from '../components/Modal'; 
 
 export default function Navbar() {
   const authUser = useAuthStore((state) => state.authUser);
@@ -23,7 +23,7 @@ export default function Navbar() {
     admin: [
       { name: 'Dashboard', path: '/admin/dashboard' },
       { name: 'Kelola Sesi', path: '/admin/kelola-sesi' },
-      { name: 'Koleksi Sesi', path: '/admin/koleksi-soal' },
+      { name: 'Koleksi Soal', path: '/admin/koleksi-soal' },
     ],
     juri: [{ name: 'Dashboard', path: '/juri/dashboard' }],
   };

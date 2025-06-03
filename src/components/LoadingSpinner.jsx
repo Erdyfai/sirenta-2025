@@ -1,6 +1,7 @@
 import React from 'react';
 
 export default function LoadingSpinner({ size = 'md' }) {
+  console.log("loading spinner rendered");
   const sizeClasses = {
     sm: 'h-4 w-4 border-2',
     md: 'h-8 w-8 border-4',
