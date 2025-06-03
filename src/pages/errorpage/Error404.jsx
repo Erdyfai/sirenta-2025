@@ -4,7 +4,7 @@ import img404 from '../../assets/error404.svg';
 
 const Error404 = () => {
   const navigate = useNavigate();
-  const [countdown, setCountdown] = useState(100000);
+  const [countdown, setCountdown] = useState(10); //in second
 
   useEffect(() => {
     const timer = setInterval(() => {

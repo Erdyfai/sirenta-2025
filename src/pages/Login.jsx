@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect} from 'react';
 import { useNavigate } from 'react-router-dom';
 import logo from '../assets/logo-sirenta.png';
 import Alert from '@mui/material/Alert';
@@ -22,7 +22,6 @@ export default function Login() {
   async function handleLogin(e) {
     e.preventDefault();
 
-    // Reset errors
     setFormError({ nim: '', password: '', general: '' });
 
     let hasError = false;
@@ -122,8 +121,8 @@ export default function Login() {
         </form>
       </div>
 
-      <footer className="absolute bottom-2 w-full text-center text-sm text-gray-500">
-        © {new Date().getFullYear()} Sirenta. All rights reserved.
+      <footer className="absolute bottom-2 w-full text-sm text-gray-500">
+      Developed by Information System Division Infotech &copy; {new Date().getFullYear()} | Informatics Laboratory, University of Muhammadiyah Malang
       </footer>
     </div>
   );

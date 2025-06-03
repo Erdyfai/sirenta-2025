@@ -10,23 +10,23 @@ import AdminDashboard from './pages/admin/Dashboard';
 import KelolaSesi from './pages/admin/KelolaSesi';
 import KoleksiSoal from './pages/admin/KoleksiSoal';
 import LayananPengaduan from './pages/admin/LayananPengaduan';
-import KelolaSoal from './pages/admin/DaftarSoal';
+import KelolaSoal from './pages/admin/EditSoal';
 
 import JuriDashboard from './pages/juri/Dashboard';
 
 import Error404 from './pages/errorpage/Error404';
 import Error500 from './pages/errorpage/Error500';
 
-import PrivateRoute from './hook/PrivateRoute';
-
+import PrivateRoute from './routes/PrivateRoute';
+import PublicRoute from './routes/PublicRoute';
 
 export default function AppRoutes() {
 
   return (
-    <Router>
       <Routes>
-        <Route path="/" element={<Login />} />
-
+        <Route element={<PublicRoute />}>
+          <Route path="/" element={<Login />} />
+        </Route>
         {/* Participant Route */}
         <Route element={<PrivateRoute allowedRoles={["participant"]} />}>
           <Route path="/participant/dashboard" element={<ParticipantDashboard />} />
@@ -39,7 +39,7 @@ export default function AppRoutes() {
           <Route path="/admin/dashboard" element={<AdminDashboard />} />
           <Route path="/admin/kelola-sesi" element={<KelolaSesi />} />
           <Route path="/admin/koleksi-soal" element={<KoleksiSoal />} />
-          <Route path="/admin/koleksi-soal/daftar-soal" element={<KelolaSoal />} />
+          <Route path="/admin/koleksi-soal/edit" element={<KelolaSoal />} />
           <Route path="/admin/layanan-pengaduan" element={<LayananPengaduan />} />
         </Route>
         
@@ -52,6 +52,5 @@ export default function AppRoutes() {
         <Route path="/error404" element={<Error404 />} />
         <Route path="*" element={<Error404 />} />
       </Routes>
-    </Router>
   );
 }

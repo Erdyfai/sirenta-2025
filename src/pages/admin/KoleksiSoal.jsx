@@ -4,6 +4,8 @@ import { useNavigate } from 'react-router-dom';
 import Modal from '../../components/Modal';
 import Table from '../../components/Table';
 import Navbar from '../../components/Navbar';
+import Sidebar from '../../components/Sidebar';
+import Breadcrumbs from '../../components/BreadCrumbs';
 
 export default function KelolaSoal() {
   const [showModal, setShowModal] = useState(false);
@@ -12,7 +14,7 @@ export default function KelolaSoal() {
 
   function handleClick(e) {
     e.preventDefault();
-    navigate('/admin/koleksi-soal/daftar-soal');
+    navigate('/admin/koleksi-soal/edit');
   }
 
   const [koleksi, setKoleksi] = useState([
@@ -54,67 +56,71 @@ export default function KelolaSoal() {
   ];
 
   return (
-    <div className="">
-      <Navbar />
-      <div className="min-h-screen w-[90%] mx-auto pt-28">
-        <div className="max-w-12xl mx-auto text-left pt-6 pb-6">
-            <h2 className="text-4xl font-bold text-gray-800">Koleksi Soal</h2>
-        </div>
-        <div className="max-w-12xl mx-auto bg-white rounded-xl shadow-md p-6">
-          {/* Text & button*/}
-          <div className="flex justify-between items-center mb-4">
-            <h2 className="text-xl font-semibold">List Koleksi Soal</h2>
-            <div className="relative">
-              <button onClick={() => setDropdownOpen(!dropdownOpen)} className="btn btn-success flex items-center gap-1">
-                <Plus size={16} />
-                Tambah Koleksi
-                <ChevronDown size={16} />
-              </button>
-              {dropdownOpen && (
-                <div className="absolute right-0 mt-2 w-48 bg-white rounded border shadow z-10">
-                  <button
-                    onClick={() => {
-                      setShowModal(true);
-                      setDropdownOpen(false);
-                    }}
-                    className="w-full text-left p-2 hover:bg-gray-100"
-                  >
-                    Buat Baru
-                  </button>
-                  <button onClick={() => setDropdownOpen(false)} className="w-full text-left p-2 hover:bg-gray-100">
-                    Gunakan Koleksi
-                  </button>
-                </div>
-              )}
-            </div>
+    <div className="flex h-screen bg-gray-100 font-inter">
+      <Sidebar />
+      <div className="flex-1 flex flex-col overflow-hidden">
+        <Navbar />
+        <div className="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100 pt-30 p-6">
+          <Breadcrumbs />
+          <div className="max-w-12xl mx-auto text-left pb-6">
+              <h2 className="text-4xl font-bold text-gray-800">Koleksi Soal</h2>
           </div>
-          {/* Tabel */}
-          <Table columns={columns} data={koleksi} />
+          <div className="max-w-12xl mx-auto bg-white rounded-xl shadow-md p-6">
+            {/* Text & button*/}
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-xl font-semibold">List Koleksi Soal</h2>
+              <div className="relative">
+                <button onClick={() => setDropdownOpen(!dropdownOpen)} className="btn btn-success flex items-center gap-1">
+                  <Plus size={16} />
+                  Tambah Koleksi
+                  <ChevronDown size={16} />
+                </button>
+                {dropdownOpen && (
+                  <div className="absolute right-0 mt-2 w-48 bg-white rounded border shadow z-10">
+                    <button
+                      onClick={() => {
+                        setShowModal(true);
+                        setDropdownOpen(false);
+                      }}
+                      className="w-full text-left p-2 hover:bg-gray-100"
+                    >
+                      Buat Baru
+                    </button>
+                    <button onClick={() => setDropdownOpen(false)} className="w-full text-left p-2 hover:bg-gray-100">
+                      Gunakan Koleksi
+                    </button>
+                  </div>
+                )}
+              </div>
+            </div>
+            {/* Tabel */}
+            <Table columns={columns} data={koleksi} />
+          </div>
+          <Modal isOpen={showModal} onClose={() => setShowModal(false)} title="Tambah Koleksi Soal">
+              <form>
+                <div className="mb-4">
+                  <label className="block text-sm font-medium mb-1">Judul Koleksi</label>
+                  <input className="input input-bordered w-full" placeholder="Contoh: Bank Soal 2025" />
+                </div>
+                <div className="mb-4">
+                  <label className="block text-sm font-medium mb-1">Penggunaan / Deskripsi</label>
+                  <input className="input input-bordered w-full" placeholder="Contoh: Seleksi Asisten 2025" />
+                </div>
+                <div className="mb-4">
+                  <label className="block text-sm font-medium mb-1">Durasi Pengerjaan (Menit)</label>
+                  <input type="number" className="input input-bordered w-full" placeholder="Contoh: 120" />
+                </div>
+                <div className="mb-4">
+                  <label className="block text-sm font-medium mb-1">Dimulai Pada</label>
+                  <input type="datetime-local" className="input input-bordered w-full" />
+                </div>
+                <div className="modal-action">
+                  <button type="submit" className="btn btn-primary">Simpan</button>
+                  <button type="button" className="btn" onClick={() => setShowModal(false)}>Batal</button>
+                </div>
+              </form>
+          </Modal>
         </div>
-        <Modal isOpen={showModal} onClose={() => setShowModal(false)} title="Tambah Koleksi Soal">
-            <form>
-              <div className="mb-4">
-                <label className="block text-sm font-medium mb-1">Judul Koleksi</label>
-                <input className="input input-bordered w-full" placeholder="Contoh: Bank Soal 2025" />
-              </div>
-              <div className="mb-4">
-                <label className="block text-sm font-medium mb-1">Penggunaan / Deskripsi</label>
-                <input className="input input-bordered w-full" placeholder="Contoh: Seleksi Asisten 2025" />
-              </div>
-              <div className="mb-4">
-                <label className="block text-sm font-medium mb-1">Durasi Pengerjaan (Menit)</label>
-                <input type="number" className="input input-bordered w-full" placeholder="Contoh: 120" />
-              </div>
-              <div className="mb-4">
-                <label className="block text-sm font-medium mb-1">Dimulai Pada</label>
-                <input type="datetime-local" className="input input-bordered w-full" />
-              </div>
-              <div className="modal-action">
-                <button type="submit" className="btn btn-primary">Simpan</button>
-                <button type="button" className="btn" onClick={() => setShowModal(false)}>Batal</button>
-              </div>
-            </form>
-        </Modal>
       </div>
     </div>
   );
