@@ -17,7 +17,7 @@ module.exports = function(sequelize, DataTypes) {
       unique: "nim"
     },
     angkatan: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.DATE,
       allowNull: true
     },
     email: {
