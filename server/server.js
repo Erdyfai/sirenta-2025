@@ -1,6 +1,7 @@
 const express = require('express');
 const dotenv = require('dotenv');
 const authRoutes = require('./route/auth.route.js');
+const participantRoutes = require('./route/participant.route.js');
 const corsMiddleware = require('./middleware/cors.middleware.js');
 const cookieParser = require('cookie-parser');
 
@@ -19,6 +20,7 @@ app.use(cookieParser());
 
 // Routes
 app.use('/api/auth', authRoutes);
+app.use('/api/participant', participantRoutes);
 
 // Test DB connection and sync (opsional)
 db.sequelize.authenticate()
