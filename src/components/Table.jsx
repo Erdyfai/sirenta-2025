@@ -15,9 +15,7 @@ export default function Table({ columns, data }) {
           {data.map((row, rowIndex) => (
             <tr key={rowIndex}>
               {columns.map((col, colIndex) => (
-                <td key={colIndex}>
-                  {col.render ? col.render(row, rowIndex) : row[col.accessor]}
-                </td>
+                <td key={colIndex}>{col.render ? col.render(row, rowIndex) : row[col.accessor]}</td>
               ))}
             </tr>
           ))}

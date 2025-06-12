@@ -20,6 +20,62 @@ const tableData = [
     catatan: 'Bagus dalam presentasi',
     nilai: 88,
   },
+  {
+    nim: '202310370311237',
+    name: 'Rina',
+    motivasi: 'Tertarik penelitian',
+    catatan: 'Bagus dalam presentasi',
+    nilai: 88,
+  },
+  {
+    nim: '202310370311237',
+    name: 'Rina',
+    motivasi: 'Tertarik penelitian',
+    catatan: 'Bagus dalam presentasi',
+    nilai: 88,
+  },
+  {
+    nim: '202310370311237',
+    name: 'Rina',
+    motivasi: 'Tertarik penelitian',
+    catatan: 'Bagus dalam presentasi',
+    nilai: 88,
+  },
+  {
+    nim: '202310370311237',
+    name: 'Rina',
+    motivasi: 'Tertarik penelitian',
+    catatan: 'Bagus dalam presentasi',
+    nilai: 88,
+  },
+  {
+    nim: '202310370311237',
+    name: 'Rina',
+    motivasi: 'Tertarik penelitian',
+    catatan: 'Bagus dalam presentasi',
+    nilai: 88,
+  },
+  {
+    nim: '202310370311237',
+    name: 'Rina',
+    motivasi: 'Tertarik penelitian',
+    catatan: 'Bagus dalam presentasi',
+    nilai: 88,
+  },
+  {
+    nim: '202310370311237',
+    name: 'Rina',
+    motivasi: 'Tertarik penelitian',
+    catatan: 'Bagus dalam presentasi',
+    nilai: 88,
+  },
+  {
+    nim: '202310370311237',
+    name: 'Rina',
+    motivasi: 'Tertarik penelitian',
+    catatan: 'Bagus dalam presentasi',
+    nilai: 88,
+  },
 ];
 
 export default tableData;
