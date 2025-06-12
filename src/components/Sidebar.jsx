@@ -1,11 +1,6 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import {
-  Home,
-  FileText,
-  CalendarCheck,
-  AlertCircle
-} from 'lucide-react';
+import { Home, FileText, CalendarCheck, AlertCircle, HelpCircle } from 'lucide-react';
 
 function Sidebar() {
   const location = useLocation();
@@ -36,6 +31,12 @@ function Sidebar() {
       icon: <AlertCircle className="w-5 h-5 mr-3" />,
       external: true,
     },
+    {
+      label: 'Kelola FAQ',
+      path: '/admin/FAQ',
+      icon: <HelpCircle className="w-5 h-5 mr-3" />,
+      external: true,
+    },
   ];
 
   return (
@@ -50,18 +51,14 @@ function Sidebar() {
             if (item.type === 'label') {
               return (
                 <li key={`label-${item.label}`} className="mb-2 mt-4">
-                  <span className="text-xs font-semibold text-gray-400 uppercase px-6 tracking-wider">
-                    {item.label}
-                  </span>
+                  <span className="text-xs font-semibold text-gray-400 uppercase px-6 tracking-wider">{item.label}</span>
                 </li>
               );
             }
 
             const isActive = location.pathname.startsWith(item.path);
             const baseClasses = `flex items-center py-2 px-6 rounded-r-full font-inter transition-colors duration-200`;
-            const activeClasses = isActive
-              ? 'bg-blue-50 text-orange-lab'
-              : 'text-gray-600 hover:bg-gray-100 hover:text-orange-lab';
+            const activeClasses = isActive ? 'bg-blue-50 text-orange-lab' : 'text-gray-600 hover:bg-gray-100 hover:text-orange-lab';
 
             const key = `nav-${item.path || item.label}`;
 
