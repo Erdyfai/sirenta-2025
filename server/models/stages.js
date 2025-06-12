@@ -23,14 +23,23 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.TEXT,
       allowNull: true
     },
-    order: {
+    status: {
+      type: DataTypes.ENUM('active', 'inactive', 'completed'),
+      allowNull: false,
+      defaultValue: "inactive"
+    },
+    stage_order: {
       type: DataTypes.INTEGER,
       allowNull: true,
-    }
+    },
+    end_date: {
+      type: DataTypes.DATE,
+      allowNull: true,
+    },
   }, {
     sequelize,
     tableName: 'stages',
-    timestamps: true,
+    timestamps: false,
     indexes: [
       {
         name: "PRIMARY",
