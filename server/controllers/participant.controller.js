@@ -1,6 +1,6 @@
-const { users, stages, user_progress, recruitment_sessions } = require("../models");
+const { users, stages, user_progress, recruitment_sessions, registrations } = require("../models");
 
-const profile = async (req, res) => {
+  const profile = async (req, res) => {
     try {
       const userId = req.user.userId;
   
@@ -28,11 +28,58 @@ const profile = async (req, res) => {
     }
   };
 
-const progress = async (req, res) => {
-
+  const progress = async (req, res) => {
+    try {
+      const userId = req.user.userId;
+  
+      // Ambil sesi rekrutmen aktif dan stages-nya
+      const session = await recruitment_sessions.findOne({
+        where: { is_active: true },
+        include: [{
+          model: stages,
+          as: 'stages',
+          order: [['stage_order', 'ASC']],
+        }],
+      });
+  
+      if (!session) {
+        return res.status(404).json({ message: 'Tidak ada sesi rekrutmen aktif.' });
+      }
+  
+      const stageIds = session.stages.map(stage => stage.id);
+  
+      // Ambil progres user di stages yang ada di sesi ini
+      const progressList = await user_progress.findAll({
+        where: {
+          user_id: userId,
+          stage_id: stageIds,
+        },
+      });
+  
+      // Gabungkan stage dan progress
+      const result = session.stages.map(stage => {
+        const progress = progressList.find(p => p.stage_id === stage.id);
+        return {
+          stage_id: stage.id,
+          stage_name: stage.name,
+          stage_order: stage.stage_order,
+          status: progress ? progress.status : 'pending',
+        };
+      });
+  
+      return res.json({
+        session_id: session.id,
+        stages_progress: result,
+      });
+  
+    } catch (error) {
+      console.error('Error fetching progress:', error);
+      return res.status(500).json({ message: 'Server error.' });
+    }
   };
+  
 
-const dashboardStatus = async (req, res) => {
+  const dashboardStatus = async (req, res) => {
     try {
       const userId = req.user.userId;
 
@@ -41,7 +88,7 @@ const dashboardStatus = async (req, res) => {
         include: [{
           model: stages,
           as: 'stages',
-          order: [['order', 'ASC']],
+          order: [['stage_order', 'ASC']],
         }],
       });
 
@@ -51,39 +98,37 @@ const dashboardStatus = async (req, res) => {
 
       // 2. Ambil stage pendaftaran (misalnya berdasarkan nama atau order = 1)
       const registrationStage = session.stages.find(stage => stage.name.toLowerCase() === 'pendaftaran');
-
+      
       if (!registrationStage) {
         return res.status(500).json({ message: 'Stage pendaftaran tidak ditemukan.' });
       }
 
       // 3. Cek apakah waktu pendaftaran sudah lewat
-      const now = new Date();
-      const registrationClosed = registrationStage.closed_at && now > new Date(registrationStage.closed_at);
-
-      if (registrationClosed) {
+      if (!registrationStage.status) {
         return res.json({ state: 'registration closed', message: 'Pendaftaran telah ditutup.' });
       }
 
       // 4. Cek apakah user sudah mendaftar
-      const existingProgress = await user_progress.findOne({
+      const registered = await registrations.findOne({
         where: {
           user_id: userId,
-          stage_id: registrationStage.id,
+          session_id: session.id,
         },
       });
 
-      if (!existingProgress) {
-        return res.json({ state: 'D', message: 'Pendaftaran dibuka. Anda belum mendaftar.' });
+      if (!registered) {
+        return res.json({ state: 'registration', message: 'Pendaftaran dibuka.' });
       }
 
       // 5. Sudah mendaftar dan pendaftaran masih buka
-      return res.json({ state: 'B', message: 'Anda telah mendaftar. Ini timeline seleksi.', session });
-    } catch (error) {
+      return res.json({ state: 'timeline', message: 'User Progress', session });
+    } 
+    catch (error) {
       console.error('Error checking dashboard status:', error);
       return res.status(500).json({ message: 'Server error.' });
     }
   };
 
-  module.exports = {profile, progress};
+  module.exports = {profile, progress, dashboardStatus};
 
   

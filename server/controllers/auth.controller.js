@@ -17,11 +17,12 @@ const login = async (req, res) => {
       return res.status(400).json({ message: "Invalid Credentials" });
     }
 
-    generateToken(user.id, user.role, res);
+    const token = generateToken(user.id, user.role, res);
 
     res.status(200).json({
       id: user.id,
       role: user.role,
+      
     });
   } catch (error) {
     console.error("Login error:", error);

@@ -23,6 +23,11 @@ module.exports = function(sequelize, DataTypes) {
         key: 'id'
       }
     },
+    updated_at: {
+      type: DataTypes.DATE,
+      allowNull: true,
+      defaultValue: Sequelize.Sequelize.literal('CURRENT_TIMESTAMP')
+    },
     status: {
       type: DataTypes.ENUM('pending','in_progress','passed','failed'),
       allowNull: true,
@@ -31,7 +36,7 @@ module.exports = function(sequelize, DataTypes) {
   }, {
     sequelize,
     tableName: 'user_progress',
-    timestamps: true,
+    timestamps: false,
     indexes: [
       {
         name: "PRIMARY",
