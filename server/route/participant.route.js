@@ -7,7 +7,7 @@ const router = express.Router();
 const ROLE = "participant"; 
 
 router.get('/profile', protectRoute([ROLE]), profile);
-router.get('/progress', protectRoute([ROLE]), progress);
+router.get('/progress', protectRoute(), progress);
 router.get('/dashboard-status', protectRoute([ROLE]), dashboardStatus);
 
 module.exports = router;

@@ -17,7 +17,8 @@ module.exports = function(sequelize, DataTypes) {
     },
     status: {
       type: DataTypes.ENUM('pending','in_progress','passed','failed'),
-      allowNull: true
+      allowNull: false,
+      defaultValue: 'pending'
     },
     content: {
       type: DataTypes.TEXT,

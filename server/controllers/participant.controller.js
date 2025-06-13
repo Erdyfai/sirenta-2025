@@ -97,7 +97,7 @@ const { users, stages, user_progress, recruitment_sessions, registrations } = re
       }
 
       // 2. Ambil stage pendaftaran (misalnya berdasarkan nama atau order = 1)
-      const registrationStage = session.stages.find(stage => stage.name.toLowerCase() === 'pendaftaran');
+      const registrationStage = session.stages.find(stage => stage.stage_order === 1);
       
       if (!registrationStage) {
         return res.status(500).json({ message: 'Stage pendaftaran tidak ditemukan.' });
