@@ -46,6 +46,24 @@ const useParticipantStore = create((set) => ({
       toast.error('Gagal memuat status dashboard');
     }
   },
+
+  registerParticipant: async (data) => {
+    try {
+      const response = await api.post('/registered', data);
+      toast.success('Pendaftaran berhasil!');
+
+      // Panggil ulang dashboard & progress setelah mendaftar
+      const { fetchDashboardStatus, fetchProgress } = get();
+      await Promise.all([
+        fetchDashboardStatus(),
+        fetchProgress()
+      ]);
+    } catch (error) {
+      console.error('Gagal mendaftar:', error);
+      const message = error?.response?.data?.message || 'Terjadi kesalahan saat mendaftar.';
+      toast.error(message);
+    }
+  },
 }));
 
 export default useParticipantStore;

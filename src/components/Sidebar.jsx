@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Home, FileText, CalendarCheck, AlertCircle, HelpCircle } from 'lucide-react';
+import { Home, FileText, CalendarCheck, HelpCircle } from 'lucide-react';
 
 function Sidebar() {
   const location = useLocation();
@@ -24,12 +24,6 @@ function Sidebar() {
       label: 'Kelola Sesi',
       path: '/admin/kelola-sesi',
       icon: <CalendarCheck className="w-5 h-5 mr-3" />,
-    },
-    {
-      label: 'Layanan Pengaduan',
-      path: '#',
-      icon: <AlertCircle className="w-5 h-5 mr-3" />,
-      external: true,
     },
     {
       label: 'Kelola FAQ',
