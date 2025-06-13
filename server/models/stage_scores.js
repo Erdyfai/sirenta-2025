@@ -54,7 +54,7 @@ module.exports = function(sequelize, DataTypes) {
   }, {
     sequelize,
     tableName: 'stage_scores',
-    timestamps: true,
+    timestamps: false,
     indexes: [
       {
         name: "PRIMARY",

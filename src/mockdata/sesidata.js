@@ -1,3 +1,4 @@
+
 const sesidata = [
   {
     id: 1,
@@ -39,4 +40,4 @@ const sesidata = [
   },
 ];
 
-export default sesidata;
+

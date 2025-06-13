@@ -4,6 +4,7 @@ const authRoutes = require('./route/auth.route.js');
 const participantRoutes = require('./route/participant.route.js');
 const corsMiddleware = require('./middleware/cors.middleware.js');
 const cookieParser = require('cookie-parser');
+const juryRoutes = require('./route/jury.route.js');
 
 dotenv.config();
 const app = express();
@@ -17,5 +18,6 @@ app.use(cookieParser());
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/participant', participantRoutes);
+app.use('/api/jury', juryRoutes);
 
 module.exports = app;

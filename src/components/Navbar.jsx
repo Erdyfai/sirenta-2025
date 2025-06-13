@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import logo from '../assets/logo-sirenta.png';
 import { useAuthStore } from '../stores/useAuthStore';
 import LoadingSpinner from '../components/LoadingSpinner';
-import Modal from '../components/Modal'; 
+import Modal from '../components/Modal';
 
 export default function Navbar() {
   const authUser = useAuthStore((state) => state.authUser);
@@ -64,16 +64,10 @@ export default function Navbar() {
           <div className="dropdown dropdown-end">
             <div tabIndex={0} role="button" className="btn btn-ghost btn-circle avatar">
               <div className="w-12 rounded-full">
-                <img
-                  alt="User Avatar"
-                  src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
-                />
+                <img alt="User Avatar" src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" />
               </div>
             </div>
-            <ul
-              tabIndex={0}
-              className="menu menu-sm dropdown-content bg-base-200 rounded-box z-10 mt-3 w-max p-2 shadow"
-            >
+            <ul tabIndex={0} className="menu menu-sm dropdown-content bg-base-200 rounded-box z-10 mt-3 w-max p-2 shadow">
               <li>
                 <button onClick={() => setIsModalOpen(true)}>Logout</button>
               </li>
@@ -81,10 +75,7 @@ export default function Navbar() {
           </div>
         </div>
 
-        <button
-          className="md:hidden btn btn-ghost btn-circle"
-          onClick={() => setOpen(!open)}
-        >
+        <button className="md:hidden btn btn-ghost btn-circle" onClick={() => setOpen(!open)}>
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-6 h-6">
             <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16m-7 6h7" />
           </svg>
@@ -97,10 +88,7 @@ export default function Navbar() {
           open ? 'translate-x-0' : '-translate-x-full'
         } transition-transform duration-300 ease-in-out md:hidden`}
       >
-        <button
-          className="btn btn-ghost absolute top-2 right-2"
-          onClick={() => setOpen(false)}
-        >
+        <button className="btn btn-ghost absolute top-2 right-2" onClick={() => setOpen(false)}>
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-6 h-6">
             <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
           </svg>
@@ -132,8 +120,12 @@ export default function Navbar() {
         <p className="py-4">Apakah Anda yakin ingin logout?</p>
         <div className="modal-action">
           <form method="dialog" className="space-x-2">
-            <button className="btn" onClick={() => setIsModalOpen(false)}>Batal</button>
-            <button className="btn btn-error" onClick={confirmLogout}>Logout</button>
+            <button className="btn" onClick={() => setIsModalOpen(false)}>
+              Batal
+            </button>
+            <button className="btn btn-error" onClick={confirmLogout}>
+              Logout
+            </button>
           </form>
         </div>
       </Modal>

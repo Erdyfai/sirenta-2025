@@ -7,6 +7,7 @@ module.exports = {
     for (let i = 0; i < stageNames.length; i++) {
       await queryInterface.sequelize.query(
         `UPDATE stages SET stage_order = ${i + 1} WHERE name = '${stageNames[i]}'`
+        `UPDATE stages SET stage_order = ${i + 1} WHERE name = '${stageNames[i]}'`
       );
     }
   },
