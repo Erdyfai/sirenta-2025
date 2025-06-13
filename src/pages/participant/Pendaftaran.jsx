@@ -1,147 +1,192 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Navbar from '../../components/Navbar';
+import useParticipantStore from '../../stores/useParticipantStore';
 
 const RegisterForm = () => {
+  const { profile, fetchProfile, registerParticipant } = useParticipantStore();
+  
+  const [form, setForm] = useState({
+    nama: '',
+    nim: '',
+    angkatan: '',
+    email: '',
+    whatsapp: '',
+    gender: '',
+    motivasi: '',
+    ide: '',
+    file: null,
+  });
+
+  // Auto-fetch profile saat komponen dimount
+  useEffect(() => {
+    if (!profile) {
+      fetchProfile();
+    }
+  }, [profile, fetchProfile]);
+
+  // Auto-isi form jika profile sudah tersedia
+  useEffect(() => {
+    if (profile) {
+      setForm((prev) => ({
+        ...prev,
+        nama: profile.name || '',
+        nim: profile.nim || '',
+        email: profile.email || '',
+        angkatan: profile.angkatan || '',
+        whatsapp: profile.whatsapp || '',
+        gender: profile.gender || '',
+      }));
+    }
+  }, [profile]);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setForm((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    setForm((prev) => ({ ...prev, file }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const formData = new FormData();
+    for (const key in form) {
+      formData.append(key, form[key]);
+    }
+
+    await registerParticipant(formData);
+  };
+
   return (
     <div className="min-h-screen bg-gray-50 pt-35 py-10 px-4">
-      <Navbar></Navbar>
+      <Navbar />
       <div className="max-w-7xl mx-auto bg-white shadow-md rounded-xl p-8">
-        <form className="space-y-6">
-          {/* Nama */}
+        <form className="space-y-6" onSubmit={handleSubmit}>
+          {/* Field Form (sama seperti sebelumnya) */}
           <div>
-            <label htmlFor="nama" className="block font-semibold text-gray-700 mb-1">
-              Nama Lengkap
-            </label>
+            <label htmlFor="nama" className="block font-semibold text-gray-700 mb-1">Nama Lengkap</label>
             <input
               type="text"
-              id="nama"
-              placeholder="nama lengkap"
-              className="w-full p-3 border border-gray-300 rounded-md bg-gray-100 focus:outline-none focus:ring-2 focus:ring-orange-400"
+              name="nama"
+              value={form.nama}
+              onChange={handleChange}
               required
+              className="w-full p-3 border rounded-md bg-gray-100"
             />
           </div>
-          {/* NIM */}
+
           <div>
-            <label htmlFor="nim" className="block font-semibold text-gray-700 mb-1">
-              Nomor Induk Mahasiswa
-            </label>
-            <input
-              type="tel"
-              id="nim"
-              placeholder="202xxxxxxxxxxxx"
-              className="w-full p-3 border border-gray-300 rounded-md bg-gray-100 focus:outline-none focus:ring-2 focus:ring-orange-400"
-              required
-            />
-          </div>
-            {/* Angkatan */}
-            <div>
-            <label htmlFor="angkatan" className="block font-semibold text-gray-700 mb-1">
-              Angkatan
-            </label>
+            <label htmlFor="nim" className="block font-semibold text-gray-700 mb-1">NIM</label>
             <input
               type="text"
-              id="angkatan"
-              placeholder="202x"
-              className="w-full p-3 border border-gray-300 rounded-md bg-gray-100 focus:outline-none focus:ring-2 focus:ring-orange-400"
+              name="nim"
+              value={form.nim}
+              onChange={handleChange}
               required
+              className="w-full p-3 border rounded-md bg-gray-100"
             />
           </div>
-          {/* Email */}
+
           <div>
-            <label htmlFor="email" className="block font-semibold text-gray-700 mb-1">
-              Email
-            </label>
+            <label htmlFor="angkatan" className="block font-semibold text-gray-700 mb-1">Angkatan</label>
+            <input
+              type="text"
+              name="angkatan"
+              value={form.angkatan}
+              onChange={handleChange}
+              required
+              className="w-full p-3 border rounded-md bg-gray-100"
+            />
+          </div>
+
+          <div>
+            <label htmlFor="email" className="block font-semibold text-gray-700 mb-1">Email</label>
             <input
               type="email"
-              id="email"
-              placeholder="example@mail.com"
-              className="w-full p-3 border border-gray-300 rounded-md bg-gray-100 focus:outline-none focus:ring-2 focus:ring-orange-400"
+              name="email"
+              value={form.email}
+              onChange={handleChange}
               required
+              className="w-full p-3 border rounded-md bg-gray-100"
             />
-            <p className="text-sm text-gray-500 mt-1">Pastikan email yang dimasukkan aktif.</p>
           </div>
 
-          {/* Nomor WhatsApp */}
           <div>
-            <label htmlFor="whatsapp" className="block font-semibold text-gray-700 mb-1">
-              Nomor WhatsApp
-            </label>
+            <label htmlFor="whatsapp" className="block font-semibold text-gray-700 mb-1">WhatsApp</label>
             <input
               type="tel"
-              id="whatsapp"
-              placeholder="08xxxxxxxxxx"
-              className="w-full p-3 border border-gray-300 rounded-md bg-gray-100 focus:outline-none focus:ring-2 focus:ring-orange-400"
+              name="whatsapp"
+              value={form.whatsapp}
+              onChange={handleChange}
               required
+              className="w-full p-3 border rounded-md bg-gray-100"
             />
-            <p className="text-sm text-gray-500 mt-1">Pastikan nomor yang dimasukkan aktif.</p>
           </div>
 
-          {/* Jenis Kelamin */}
           <div>
-            <label className="block font-semibold text-gray-700 mb-2">
-              Jenis Kelamin
-            </label>
-            <div className="flex items-center gap-6">
+            <label className="block font-semibold text-gray-700 mb-2">Jenis Kelamin</label>
+            <div className="flex gap-4">
               <label className="flex items-center gap-2">
-                <input type="radio" name="gender" value="Pria" className="accent-orange-500" />
+                <input
+                  type="radio"
+                  name="gender"
+                  value="Pria"
+                  checked={form.gender === 'Pria'}
+                  onChange={handleChange}
+                  className="accent-orange-500"
+                />
                 Pria
               </label>
               <label className="flex items-center gap-2">
-                <input type="radio" name="gender" value="Wanita" className="accent-orange-500" />
+                <input
+                  type="radio"
+                  name="gender"
+                  value="Wanita"
+                  checked={form.gender === 'Wanita'}
+                  onChange={handleChange}
+                  className="accent-orange-500"
+                />
                 Wanita
               </label>
             </div>
           </div>
 
-          {/* Motivasi */}
           <div>
-            <label htmlFor="motivasi" className="block font-semibold text-gray-700 mb-1">
-              Jelaskan motivasi kamu untuk menjadi asisten laboratorium!
-            </label>
+            <label htmlFor="motivasi" className="block font-semibold text-gray-700 mb-1">Motivasi</label>
             <textarea
-              id="motivasi"
-              className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-400"
-              rows="4"
-              placeholder="Tuliskan motivasimu di sini..."
+              name="motivasi"
+              value={form.motivasi}
+              onChange={handleChange}
+              rows={4}
+              className="w-full p-3 border rounded-md"
             ></textarea>
           </div>
 
-          {/* Ide Kreatif */}
           <div>
-            <label htmlFor="ide" className="block font-semibold text-gray-700 mb-1">
-              Jelaskan ide kreatif anda!
-            </label>
+            <label htmlFor="ide" className="block font-semibold text-gray-700 mb-1">Ide Kreatif</label>
             <textarea
-              id="ide"
-              className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-400"
-              rows="4"
-              placeholder="Yuk tuliskan ide kreatifmu di sini..."
+              name="ide"
+              value={form.ide}
+              onChange={handleChange}
+              rows={4}
+              className="w-full p-3 border rounded-md"
             ></textarea>
           </div>
 
-          {/* Upload File */}
-          <div className="mb-4">
-           <div className="flex items-center justify-between mb-2">
-            <label className="block font-semibold text-gray-700 mb-1">Lampiran .pdf (max. 1mb)</label>
+          <div>
+            <label className="block font-semibold text-gray-700 mb-1">Lampiran CV (.pdf max 1MB)</label>
+            <a href="/template-cv.pdf" download className="text-orange-500 text-sm mb-2 inline-block">📄 Download Template CV</a>
+            <input
+              type="file"
+              accept=".pdf"
+              onChange={handleFileChange}
+              className="block mt-2 w-full file:border-0 file:py-2 file:px-4 file:rounded file:bg-gray-100"
+            />
           </div>
-          <a
-              href="/template-cv.pdf" 
-              download
-              className="text-orange-500 text-sm border border-orange-300 px-3 py-1 rounded hover:bg-orange-100"
-             >
-              📄 Download Template CV
-          </a>
-          <input
-            type="file"
-            id="file"
-            accept=".pdf"
-            className="block pt-5 w-full text-sm text-gray-700 file:mr-4 file:py-1 file:px-4
-                      file:rounded file:border-0 file:text-sm file:font-semibold
-                      file:bg-gray-100 file:text-gray-700 hover:file:bg-gray-200"
-          />
-        </div>
 
-          {/* Tombol Daftar */}
           <div className="text-center">
             <button
               type="submit"
@@ -152,7 +197,6 @@ const RegisterForm = () => {
           </div>
         </form>
 
-        {/* Footer */}
         <footer className="mt-10 text-center text-xs text-gray-500">
           Developed by Information System Division Infotech © 2025
           <br />

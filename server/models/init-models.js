@@ -2,6 +2,7 @@ var DataTypes = require("sequelize").DataTypes;
 var _SequelizeMeta = require("./SequelizeMeta");
 var _answers = require("./answers");
 var _choices = require("./choices");
+var _faq = require("./faq");
 var _jury_group_members = require("./jury_group_members");
 var _jury_groups = require("./jury_groups");
 var _question_banks = require("./question_banks");
@@ -22,6 +23,7 @@ function initModels(sequelize) {
   var SequelizeMeta = _SequelizeMeta(sequelize, DataTypes);
   var answers = _answers(sequelize, DataTypes);
   var choices = _choices(sequelize, DataTypes);
+  var faq = _faq(sequelize, DataTypes);
   var jury_group_members = _jury_group_members(sequelize, DataTypes);
   var jury_groups = _jury_groups(sequelize, DataTypes);
   var question_banks = _question_banks(sequelize, DataTypes);
@@ -103,6 +105,7 @@ function initModels(sequelize) {
     SequelizeMeta,
     answers,
     choices,
+    faq,
     jury_group_members,
     jury_groups,
     question_banks,

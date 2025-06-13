@@ -129,6 +129,59 @@ const { users, stages, user_progress, recruitment_sessions, registrations } = re
     }
   };
 
-  module.exports = {profile, progress, dashboardStatus};
+  const registeredUser = async (req, res) => {
+  try {
+    const userId = req.user.userId;
+    const { user_motivation, user_idea, cv_file_path } = req.body;
+
+    if (!user_motivation || !user_idea) {
+      return res.status(400).json({ message: 'Motivasi dan ide wajib diisi.' });
+    }
+
+    const session = await recruitment_sessions.findOne({
+      where: { is_active: true },
+    });
+
+    if (!session) {
+      return res.status(400).json({ message: 'Tidak ada sesi rekrutmen aktif.' });
+    }
+
+    const existing = await registrations.findOne({
+      where: {
+        user_id: userId,
+        session_id: session.id,
+      },
+    });
+
+    if (existing) {
+      return res.status(400).json({ message: 'Anda sudah mendaftar untuk sesi ini.' });
+    }
+
+    // Pakai cv_file_path dari body jika ada (untuk testing), jika tidak buat default
+    const cvPath = cv_file_path || `/uploads/cv/${userId}.pdf`;
+
+    const newRegistration = await registrations.create({
+      user_id: userId,
+      session_id: session.id,
+      cv_file_path: cvPath,
+      user_motivation,
+      user_idea,
+      submitted_at: new Date(),
+    });
+
+    return res.status(201).json({
+      message: 'Pendaftaran berhasil.',
+      data: newRegistration,
+    });
+
+  } catch (error) {
+    console.error('Error saat mendaftar:', error);
+    return res.status(500).json({ message: 'Terjadi kesalahan pada server.' });
+  }
+};
+
+
+
+  module.exports = {profile, progress, dashboardStatus, registeredUser};
 
   
