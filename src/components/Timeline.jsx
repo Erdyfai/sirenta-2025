@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import timelineData from '../mockdata/timelineData';
+import { useEffect, useState } from 'react';
+import useParticipantStore from '../stores/useParticipantStore';
 import {
   Loader2,
   CheckCircle,
@@ -9,27 +9,47 @@ import {
   Mic,
   Users,
 } from 'lucide-react';
+import LoadingSpinner from './LoadingSpinner'; 
 
 export default function Timeline() {
-  const failedIndex = timelineData.findIndex((item) => item.status === 'failed');
-  const inProgressIndex = timelineData.findIndex((item) => item.status === 'inProgress');
-  
-  const initialIndex =
-    failedIndex !== -1 ? failedIndex :
-    inProgressIndex !== -1 ? inProgressIndex :
-    0;
-  
-  const [current, setCurrent] = useState(initialIndex);
+  const { progress, fetchProgress } = useParticipantStore();
+
+  const [current, setCurrent] = useState(0);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      setLoading(true);
+      await fetchProgress();
+      setLoading(false);
+    };
+    fetchData();
+  }, [fetchProgress]);
+
+  useEffect(() => {
+    if (!progress || progress.length === 0) return;
+
+    const failedIndex = progress.findIndex((item) => item.status === 'failed');
+    const inProgressIndex = progress.findIndex((item) => item.status === 'in_progress');
+
+    const initialIndex =
+      failedIndex !== -1 ? failedIndex :
+      inProgressIndex !== -1 ? inProgressIndex :
+      0;
+
+    setCurrent(initialIndex);
+  }, [progress]);
 
   const handlePrev = () => {
     setCurrent((prev) => (prev > 0 ? prev - 1 : prev));
   };
 
   const handleNext = () => {
-    setCurrent((prev) => (prev < timelineData.length - 1 ? prev + 1 : prev));
+    setCurrent((prev) => (prev < progress.length - 1 ? prev + 1 : prev));
   };
 
   const getStageIcon = (title) => {
+    if (!title) return null;
     if (title.includes('Pendaftaran')) return <FileText className="w-10 h-10 text-orange-500" />;
     if (title.includes('Tahap 1')) return <Pencil className="w-10 h-10 text-orange-500" />;
     if (title.includes('Tahap 2')) return <Mic className="w-10 h-10 text-orange-500" />;
@@ -38,13 +58,17 @@ export default function Timeline() {
   };
 
   const renderStatusIcon = (status) => {
-    if (status === 'done') return <CheckCircle className="w-5 h-5 text-green-600" />;
-    if (status === 'inProgress') return <Loader2 className="w-5 h-5 text-yellow-500 animate-spin" />;
+    if (status === 'passed') return <CheckCircle className="w-5 h-5 text-green-600" />;
+    if (status === 'in_progress') return <Loader2 className="w-5 h-5 text-yellow-500 animate-spin" />;
     if (status === 'failed') return <XCircle className="w-5 h-5 text-red-500" />;
     return <div className="w-4 h-4 rounded-full border-2 border-gray-400 bg-white" />;
   };
 
-  const currentData = timelineData[current];
+  if (loading || !progress || progress.length === 0) {
+    return <LoadingSpinner size="md" fullscreen={false} />;
+  }
+
+  const currentData = progress[current];
 
   return (
     <div className="p-6 max-w-4xl mx-auto">
@@ -60,29 +84,29 @@ export default function Timeline() {
         <div className="flex-1 h-1 bg-gray-200 mx-4 relative">
           <div
             className="absolute top-1/2 transform -translate-y-1/2 h-1 bg-green-500 transition-all duration-300"
-            style={{ width: `${(current / (timelineData.length - 1)) * 100}%` }}
+            style={{ width: `${(current / (progress.length - 1)) * 100}%` }}
           ></div>
 
           <div className="absolute top-full left-0 w-full flex justify-between mt-2">
-            {timelineData.map((item, index) => {
-                const clickableStatuses = ['done', 'failed', 'inProgress'];
-                const isStageClickable = clickableStatuses.includes(item.status);
-              
-                return (
-                  <div
-                    key={index}
-                    onClick={() => isStageClickable && setCurrent(index)}
-                    className={`flex flex-col items-center group ${
-                      isStageClickable ? 'cursor-pointer' : 'cursor-not-allowed'
-                    }`}
-                  >
-                    <div className="flex items-center justify-center w-6 h-6">
-                      {renderStatusIcon(item.status)}
-                    </div>
-                    <span className="mt-1">{getStageIcon(item.title)}</span>
-                    <span className="text-xs text-gray-500">{item.date}</span>
+            {progress.map((item, index) => {
+              const clickableStatuses = ['passed', 'failed', 'in_progress'];
+              const isStageClickable = clickableStatuses.includes(item.status);
+
+              return (
+                <div
+                  key={index}
+                  onClick={() => isStageClickable && setCurrent(index)}
+                  className={`flex flex-col items-center group ${
+                    isStageClickable ? 'cursor-pointer' : 'cursor-not-allowed'
+                  }`}
+                >
+                  <div className="flex items-center justify-center w-6 h-6">
+                    {renderStatusIcon(item.status)}
                   </div>
-                );
+                  <span className="mt-1">{getStageIcon(item.stage_name)}</span>
+                  <span className="text-xs text-gray-500">Tahap {item.stage_order}</span>
+                </div>
+              );
             })}
           </div>
         </div>
@@ -90,22 +114,24 @@ export default function Timeline() {
         <button
           onClick={handleNext}
           className="p-2 bg-orange-500 rounded-full disabled:opacity-50"
-          disabled={current === initialIndex}
+          disabled={currentData.status === 'in_progress'}
         >
           <span className="text-xl">→</span>
         </button>
       </div>
 
       <div className="text-center mt-20">
-        <h2 className="text-3xl text-gray-600 font-bold">{currentData.title}</h2>
-        <p className="italic text-gray-500 mt-2">- {currentData.date}, 2025</p>
+        <h2 className="text-3xl text-gray-600 font-bold">{currentData.stage_name}</h2>
+        <p className="italic text-gray-500 mt-2">Urutan ke-{currentData.stage_order}</p>
 
-        {currentData.status === 'done' ? (
-          <p className="mt-4 text-gray-700 max-w-2xl mx-auto">{currentData.description}</p>
+        {currentData.status === 'passed' ? (
+          <p className="mt-4 text-gray-700 max-w-2xl mx-auto">Anda telah menyelesaikan tahap ini.</p>
         ) : currentData.status === 'failed' ? (
           <p className="mt-4 text-red-600 font-semibold">Anda tidak lolos pada tahap ini.</p>
+        ) : currentData.status === 'in_progress' ? (
+          <p className="mt-4 text-yellow-500 italic">Tahap ini sedang berlangsung.</p>
         ) : (
-          <p className="mt-4 text-yellow-500 italic">Konten akan tersedia setelah tahap ini selesai.</p>
+          <p className="mt-4 text-gray-400 italic">Tahap ini belum dibuka.</p>
         )}
       </div>
     </div>

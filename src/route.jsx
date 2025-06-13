@@ -8,7 +8,6 @@ import Pendaftaran from './pages/participant/Pendaftaran';
 
 import AdminDashboard from './pages/admin/Dashboard';
 import KelolaSesi from './pages/admin/KelolaSesi';
-import SesiPendaftaran from './pages/admin/SesiPendaftaran';
 import KoleksiSoal from './pages/admin/KoleksiSoal';
 import FAQ from './pages/admin/FAQ';
 import KelolaSoal from './pages/admin/EditSoal';
@@ -38,7 +37,6 @@ export default function AppRoutes() {
       <Route element={<PrivateRoute allowedRoles={['admin']} />}>
         <Route path="/admin/dashboard" element={<AdminDashboard />} />
         <Route path="/admin/kelola-sesi" element={<KelolaSesi />} />
-        <Route path="/admin/:sesiId/:tahap" element={<SesiPendaftaran />} />
         <Route path="/admin/koleksi-soal" element={<KoleksiSoal />} />
         <Route path="/admin/koleksi-soal/edit" element={<KelolaSoal />} />
         <Route path="/admin/FAQ" element={<FAQ />} />
