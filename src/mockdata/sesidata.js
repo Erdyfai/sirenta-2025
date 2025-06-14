@@ -40,4 +40,6 @@ const sesidata = [
   },
 ];
 
+export default sesidata;
+
 
