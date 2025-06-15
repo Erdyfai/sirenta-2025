@@ -3,7 +3,7 @@ import { create } from 'zustand';
 import { api } from '../services/api';
 import { toast } from 'react-hot-toast';
 
-const useParticipantStore = create((set) => ({
+const useParticipantStore = create((set, get) => ({
   profile: null,
   progress: [],
   sessionId: null,
@@ -47,23 +47,33 @@ const useParticipantStore = create((set) => ({
     }
   },
 
-  registerParticipant: async (data) => {
-    try {
-      const response = await api.post('/registered', data);
-      toast.success('Pendaftaran berhasil!');
+registerParticipant: async ({ user_motivation, user_idea, file }) => {
+  try {
+    const formData = new FormData();
+    formData.append('user_motivation', user_motivation);
+    formData.append('user_idea', user_idea);
+    formData.append('file', file); 
 
-      // Panggil ulang dashboard & progress setelah mendaftar
-      const { fetchDashboardStatus, fetchProgress } = get();
-      await Promise.all([
-        fetchDashboardStatus(),
-        fetchProgress()
-      ]);
-    } catch (error) {
-      console.error('Gagal mendaftar:', error);
-      const message = error?.response?.data?.message || 'Terjadi kesalahan saat mendaftar.';
-      toast.error(message);
-    }
-  },
+    const response = await api.post('/participant/registered', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+
+    toast.success('Pendaftaran berhasil!');
+
+    // Refresh data peserta setelah registrasi berhasil
+    const { fetchDashboardStatus, fetchProgress } = get();
+    await Promise.all([
+      fetchDashboardStatus(),
+      fetchProgress(),
+    ]);
+  } catch (error) {
+    console.error('Gagal mendaftar:', error);
+    const message = error?.response?.data?.message || 'Terjadi kesalahan saat mendaftar.';
+    toast.error(message);
+  }
+},
 }));
 
 export default useParticipantStore;

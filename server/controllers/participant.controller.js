@@ -1,4 +1,6 @@
 const { users, stages, user_progress, recruitment_sessions, registrations } = require("../models");
+const cloudinary = require('../config/cloudinary.js');
+const fs = require('fs');
 
   const profile = async (req, res) => {
     try {
@@ -63,6 +65,7 @@ const { users, stages, user_progress, recruitment_sessions, registrations } = re
           stage_id: stage.id,
           stage_name: stage.name,
           stage_order: stage.stage_order,
+          stage_description: stage.description,
           status: progress ? progress.status : 'pending',
         };
       });
@@ -96,19 +99,8 @@ const { users, stages, user_progress, recruitment_sessions, registrations } = re
         return res.json({ state: 'recruitmen closed', message: 'Tidak ada sesi rekrutmen yang sedang dibuka.' });
       }
 
-      // 2. Ambil stage pendaftaran (misalnya berdasarkan nama atau order = 1)
       const registrationStage = session.stages.find(stage => stage.stage_order === 1);
-      
-      if (!registrationStage) {
-        return res.status(500).json({ message: 'Stage pendaftaran tidak ditemukan.' });
-      }
 
-      // 3. Cek apakah waktu pendaftaran sudah lewat
-      if (!registrationStage.status) {
-        return res.json({ state: 'registration closed', message: 'Pendaftaran telah ditutup.' });
-      }
-
-      // 4. Cek apakah user sudah mendaftar
       const registered = await registrations.findOne({
         where: {
           user_id: userId,
@@ -116,6 +108,14 @@ const { users, stages, user_progress, recruitment_sessions, registrations } = re
         },
       });
 
+      if (!registrationStage) {
+        return res.status(500).json({ message: 'Stage pendaftaran tidak ditemukan.' });
+      }
+
+      if (registrationStage.status === 'completed' && !registered) {
+        return res.json({ state: 'registration closed', message: 'Pendaftaran telah ditutup.' });
+      }
+      
       if (!registered) {
         return res.json({ state: 'registration', message: 'Pendaftaran dibuka.' });
       }
@@ -129,57 +129,85 @@ const { users, stages, user_progress, recruitment_sessions, registrations } = re
     }
   };
 
+  
   const registeredUser = async (req, res) => {
-  try {
-    const userId = req.user.userId;
-    const { user_motivation, user_idea, cv_file_path } = req.body;
-
-    if (!user_motivation || !user_idea) {
-      return res.status(400).json({ message: 'Motivasi dan ide wajib diisi.' });
-    }
-
-    const session = await recruitment_sessions.findOne({
-      where: { is_active: true },
-    });
-
-    if (!session) {
-      return res.status(400).json({ message: 'Tidak ada sesi rekrutmen aktif.' });
-    }
-
-    const existing = await registrations.findOne({
-      where: {
+    try {
+      const userId = req.user.userId;
+      const { user_motivation, user_idea } = req.body;
+  
+      if (!user_motivation || !user_idea) {
+        return res.status(400).json({ message: 'Motivasi dan ide wajib diisi.' });
+      }
+  
+      const session = await recruitment_sessions.findOne({
+        where: { is_active: true },
+      });
+  
+      if (!session) {
+        return res.status(400).json({ message: 'Tidak ada sesi rekrutmen aktif.' });
+      }
+  
+      const existing = await registrations.findOne({
+        where: {
+          user_id: userId,
+          session_id: session.id,
+        },
+      });
+  
+      if (existing) {
+        return res.status(400).json({ message: 'Anda sudah mendaftar untuk sesi ini.' });
+      }
+  
+      let cvPath = null;
+      if (req.file) {
+        const uploadResult = await cloudinary.uploader.upload(req.file.path, {
+          resource_type: 'raw',
+          folder: 'pendaftaran_sirenta_cv',
+          public_id: `cv_${userId}_${Date.now()}`,
+        });
+  
+        cvPath = uploadResult.secure_url;
+        fs.unlinkSync(req.file.path);
+      } else {
+        return res.status(400).json({ message: 'File CV wajib diunggah.' });
+      }
+  
+      const newRegistration = await registrations.create({
         user_id: userId,
         session_id: session.id,
-      },
-    });
-
-    if (existing) {
-      return res.status(400).json({ message: 'Anda sudah mendaftar untuk sesi ini.' });
+        cv_file_path: cvPath,
+        user_motivation,
+        user_idea,
+        submitted_at: new Date(),
+      });
+  
+      // Ambil semua stage dari sesi ini
+      const sessionStages = await stages.findAll({
+        where: { session_id: session.id },
+      });
+  
+      // Masukkan user_progress dengan status in_progress hanya untuk stage_order 1
+      const progressData = sessionStages.map(stage => ({
+        user_id: userId,
+        stage_id: stage.id,
+        status: stage.stage_order === 1 ? 'in_progress' : 'pending',
+        updated_at: new Date(),
+      }));
+  
+      await user_progress.bulkCreate(progressData);
+  
+      return res.status(201).json({
+        message: 'Pendaftaran berhasil.',
+        data: newRegistration,
+      });
+  
+    } catch (error) {
+      console.error('Error saat mendaftar:', error);
+      return res.status(500).json({ message: 'Terjadi kesalahan pada server.' });
     }
-
-    // Pakai cv_file_path dari body jika ada (untuk testing), jika tidak buat default
-    const cvPath = cv_file_path || `/uploads/cv/${userId}.pdf`;
-
-    const newRegistration = await registrations.create({
-      user_id: userId,
-      session_id: session.id,
-      cv_file_path: cvPath,
-      user_motivation,
-      user_idea,
-      submitted_at: new Date(),
-    });
-
-    return res.status(201).json({
-      message: 'Pendaftaran berhasil.',
-      data: newRegistration,
-    });
-
-  } catch (error) {
-    console.error('Error saat mendaftar:', error);
-    return res.status(500).json({ message: 'Terjadi kesalahan pada server.' });
-  }
-};
-
+  };
+  
+  
 
 
   module.exports = {profile, progress, dashboardStatus, registeredUser};
