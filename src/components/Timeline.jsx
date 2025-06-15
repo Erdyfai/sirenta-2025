@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react';
 import useParticipantStore from '../stores/useParticipantStore';
+import useAdminStore from '../stores/useAdminStore';
+
 import {
   Loader2,
   CheckCircle,
@@ -9,11 +11,11 @@ import {
   Mic,
   Users,
 } from 'lucide-react';
-import LoadingSpinner from './LoadingSpinner'; 
+import LoadingSpinner from './LoadingSpinner';
 
 export default function Timeline() {
   const { progress, fetchProgress } = useParticipantStore();
-
+  const { stageInfoContent, fetchStageInfo } = useAdminStore();
   const [current, setCurrent] = useState(0);
   const [loading, setLoading] = useState(true);
 
@@ -25,19 +27,19 @@ export default function Timeline() {
     };
     fetchData();
   }, [fetchProgress]);
-
+  
   useEffect(() => {
     if (!progress || progress.length === 0) return;
-
-    const failedIndex = progress.findIndex((item) => item.status === 'failed');
+  
+    // Cari index tahap yang sedang in_progress
     const inProgressIndex = progress.findIndex((item) => item.status === 'in_progress');
-
-    const initialIndex =
-      failedIndex !== -1 ? failedIndex :
-      inProgressIndex !== -1 ? inProgressIndex :
-      0;
-
-    setCurrent(initialIndex);
+  
+    // Jika ada, set current ke tahap tersebut. Jika tidak, tetap 0
+    if (inProgressIndex !== -1) {
+      setCurrent(inProgressIndex);
+    } else {
+      setCurrent(0);
+    }
   }, [progress]);
 
   const handlePrev = () => {
@@ -122,7 +124,7 @@ export default function Timeline() {
 
       <div className="text-center mt-20">
         <h2 className="text-3xl text-gray-600 font-bold">{currentData.stage_name}</h2>
-        <p className="italic text-gray-500 mt-2">Urutan ke-{currentData.stage_order}</p>
+        <p className="italic text-gray-500 mt-2">{currentData.stage_description}</p>
 
         {currentData.status === 'passed' ? (
           <p className="mt-4 text-gray-700 max-w-2xl mx-auto">Anda telah menyelesaikan tahap ini.</p>
@@ -132,6 +134,12 @@ export default function Timeline() {
           <p className="mt-4 text-yellow-500 italic">Tahap ini sedang berlangsung.</p>
         ) : (
           <p className="mt-4 text-gray-400 italic">Tahap ini belum dibuka.</p>
+        )}
+
+        {stageInfoContent?.[currentData.status] && (
+          <div className="mt-4 bg-gray-100 p-4 rounded-md border text-gray-700 max-w-2xl mx-auto whitespace-pre-line">
+            {stageInfoContent[currentData.status]}
+          </div>
         )}
       </div>
     </div>

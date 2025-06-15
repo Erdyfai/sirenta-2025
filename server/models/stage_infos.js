@@ -27,7 +27,7 @@ module.exports = function(sequelize, DataTypes) {
   }, {
     sequelize,
     tableName: 'stage_infos',
-    timestamps: true,
+    timestamps: false,
     indexes: [
       {
         name: "PRIMARY",
@@ -39,7 +39,7 @@ module.exports = function(sequelize, DataTypes) {
       },
       {
         name: "stage_id",
-        unique: true,
+        unique: false,
         using: "BTREE",
         fields: [
           { name: "stage_id" },

@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom'; 
 import Navbar from '../../components/Navbar';
 import useParticipantStore from '../../stores/useParticipantStore';
 
 const RegisterForm = () => {
+  const navigate = useNavigate(); 
   const { profile, fetchProfile, registerParticipant } = useParticipantStore();
-  
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   const [form, setForm] = useState({
     nama: '',
     nim: '',
@@ -17,14 +20,10 @@ const RegisterForm = () => {
     file: null,
   });
 
-  // Auto-fetch profile saat komponen dimount
   useEffect(() => {
-    if (!profile) {
-      fetchProfile();
-    }
+    if (!profile) fetchProfile();
   }, [profile, fetchProfile]);
 
-  // Auto-isi form jika profile sudah tersedia
   useEffect(() => {
     if (profile) {
       setForm((prev) => ({
@@ -52,154 +51,133 @@ const RegisterForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const formData = new FormData();
-    for (const key in form) {
-      formData.append(key, form[key]);
+    if (!form.motivasi || !form.ide || !form.file) {
+      alert('Motivasi, ide, dan file wajib diisi.');
+      return;
     }
 
-    await registerParticipant(formData);
+    const payload = {
+      user_motivation: form.motivasi,
+      user_idea: form.ide,
+      file: form.file,
+    };
+
+    setIsSubmitting(true);
+    await registerParticipant(payload);
+    navigate('/participant/dashboard'); 
+    setIsSubmitting(false);
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 pt-35 py-10 px-4">
+    <div className="min-h-screen bg-gradient-to-b from-orange-50 to-white pt-24 pb-12 px-4">
       <Navbar />
-      <div className="max-w-7xl mx-auto bg-white shadow-md rounded-xl p-8">
-        <form className="space-y-6" onSubmit={handleSubmit}>
-          {/* Field Form (sama seperti sebelumnya) */}
-          <div>
-            <label htmlFor="nama" className="block font-semibold text-gray-700 mb-1">Nama Lengkap</label>
-            <input
-              type="text"
-              name="nama"
-              value={form.nama}
-              onChange={handleChange}
-              required
-              className="w-full p-3 border rounded-md bg-gray-100"
-            />
-          </div>
+      <div className="max-w-4xl mx-auto bg-white shadow-xl rounded-xl p-8 border border-orange-100">
+        <h2 className="text-2xl font-bold text-center mb-6 text-orange-600">
+          Formulir Pendaftaran Asisten Laboratorium
+        </h2>
 
-          <div>
-            <label htmlFor="nim" className="block font-semibold text-gray-700 mb-1">NIM</label>
-            <input
-              type="text"
-              name="nim"
-              value={form.nim}
-              onChange={handleChange}
-              required
-              className="w-full p-3 border rounded-md bg-gray-100"
-            />
-          </div>
-
-          <div>
-            <label htmlFor="angkatan" className="block font-semibold text-gray-700 mb-1">Angkatan</label>
-            <input
-              type="text"
-              name="angkatan"
-              value={form.angkatan}
-              onChange={handleChange}
-              required
-              className="w-full p-3 border rounded-md bg-gray-100"
-            />
-          </div>
-
-          <div>
-            <label htmlFor="email" className="block font-semibold text-gray-700 mb-1">Email</label>
-            <input
-              type="email"
-              name="email"
-              value={form.email}
-              onChange={handleChange}
-              required
-              className="w-full p-3 border rounded-md bg-gray-100"
-            />
-          </div>
-
-          <div>
-            <label htmlFor="whatsapp" className="block font-semibold text-gray-700 mb-1">WhatsApp</label>
-            <input
-              type="tel"
-              name="whatsapp"
-              value={form.whatsapp}
-              onChange={handleChange}
-              required
-              className="w-full p-3 border rounded-md bg-gray-100"
-            />
-          </div>
-
-          <div>
-            <label className="block font-semibold text-gray-700 mb-2">Jenis Kelamin</label>
-            <div className="flex gap-4">
-              <label className="flex items-center gap-2">
+        <form onSubmit={handleSubmit} className="space-y-6">
+          {/* Informasi Otomatis */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {['nama', 'nim', 'angkatan', 'email', 'whatsapp'].map((field) => (
+              <div key={field}>
+                <label className="block font-medium text-gray-700 capitalize">{field}</label>
                 <input
-                  type="radio"
-                  name="gender"
-                  value="Pria"
-                  checked={form.gender === 'Pria'}
-                  onChange={handleChange}
-                  className="accent-orange-500"
+                  type={field === 'email' ? 'email' : 'text'}
+                  name={field}
+                  value={form[field]}
+                  disabled
+                  className="w-full p-3 border rounded-md bg-gray-100 cursor-not-allowed"
                 />
-                Pria
-              </label>
-              <label className="flex items-center gap-2">
-                <input
-                  type="radio"
-                  name="gender"
-                  value="Wanita"
-                  checked={form.gender === 'Wanita'}
-                  onChange={handleChange}
-                  className="accent-orange-500"
-                />
-                Wanita
-              </label>
+              </div>
+            ))}
+          </div>
+
+          {/* Gender */}
+          <div>
+            <label className="block font-medium text-gray-700 mb-1">Jenis Kelamin</label>
+            <div className="flex gap-6">
+              {['L', 'P'].map((gender) => (
+                <label key={gender} className="flex items-center gap-2 text-gray-600">
+                  <input
+                    type="radio"
+                    name="gender"
+                    value={gender}
+                    checked={form.gender === gender}
+                    onChange={handleChange}
+                    className="accent-orange-500"
+                    disabled
+                  />
+                  {gender}
+                </label>
+              ))}
             </div>
           </div>
 
+          {/* Motivasi dan Ide */}
           <div>
-            <label htmlFor="motivasi" className="block font-semibold text-gray-700 mb-1">Motivasi</label>
+            <label className="block font-medium text-gray-700">Motivasi</label>
             <textarea
               name="motivasi"
               value={form.motivasi}
               onChange={handleChange}
+              required
               rows={4}
-              className="w-full p-3 border rounded-md"
+              className="w-full p-3 border rounded-md bg-white"
+              placeholder="Apa motivasimu menjadi asisten?"
             ></textarea>
           </div>
 
           <div>
-            <label htmlFor="ide" className="block font-semibold text-gray-700 mb-1">Ide Kreatif</label>
+            <label className="block font-medium text-gray-700">Ide Kreatif</label>
             <textarea
               name="ide"
               value={form.ide}
               onChange={handleChange}
+              required
               rows={4}
-              className="w-full p-3 border rounded-md"
+              className="w-full p-3 border rounded-md bg-white"
+              placeholder="Tulis ide yang ingin kamu kontribusikan..."
             ></textarea>
           </div>
 
+          {/* File Upload */}
           <div>
-            <label className="block font-semibold text-gray-700 mb-1">Lampiran CV (.pdf max 1MB)</label>
-            <a href="/template-cv.pdf" download className="text-orange-500 text-sm mb-2 inline-block">📄 Download Template CV</a>
+            <label className="block font-medium text-gray-700">Lampiran CV (.pdf max 5MB)</label>
+            <a
+              href="/template-cv.pdf"
+              download
+              className="text-sm text-orange-500 underline block mb-2"
+            >
+              📄 Download Template CV
+            </a>
             <input
               type="file"
-              accept=".pdf"
+              accept="application/pdf"
               onChange={handleFileChange}
-              className="block mt-2 w-full file:border-0 file:py-2 file:px-4 file:rounded file:bg-gray-100"
+              required
+              className="block w-full text-sm text-gray-700 file:mr-4 file:py-2 file:px-4
+                file:rounded file:border-0 file:text-sm file:font-semibold
+                file:bg-orange-50 file:text-orange-700 hover:file:bg-orange-100"
             />
           </div>
 
+          {/* Submit */}
           <div className="text-center">
             <button
               type="submit"
-              className="bg-orange-500 text-white font-bold px-6 py-3 rounded-md hover:bg-orange-600 transition duration-200"
+              disabled={isSubmitting}
+              className={`bg-orange-500 text-white font-semibold px-6 py-3 rounded-md shadow-md hover:bg-orange-600 transition ${
+                isSubmitting ? 'opacity-50 cursor-not-allowed' : ''
+              }`}
             >
-              Daftar
+              {isSubmitting ? 'Mendaftar...' : 'Daftar'}
             </button>
           </div>
         </form>
 
         <footer className="mt-10 text-center text-xs text-gray-500">
-          Developed by Information System Division Infotech © 2025
-          <br />
+          Developed by Information System Division Infotech © 2025 <br />
           Informatics Laboratory, University of Muhammadiyah Malang
         </footer>
       </div>

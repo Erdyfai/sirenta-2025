@@ -30,7 +30,7 @@ const Breadcrumbs = () => {
         const targetPath = customRouteMap[segment] || accumulatedPath;
 
         return (
-          <div key={targetPath} className="flex items-center">
+          <div key={`breadcrumb-${index}-${targetPath}`} className="flex items-center">
             <svg className="w-3 h-3 mx-2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
             </svg>
