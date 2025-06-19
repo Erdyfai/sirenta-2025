@@ -42,6 +42,15 @@ export default function Timeline() {
     }
   }, [progress]);
 
+  useEffect(() => {
+    if (progress.length > 0) {
+      const stageId = progress[current]?.stage_id;
+      if (stageId) {
+        fetchStageInfo(stageId); // panggil dengan parameter stageId
+      }
+    }
+  }, [current, progress, fetchStageInfo]);
+
   const handlePrev = () => {
     setCurrent((prev) => (prev > 0 ? prev - 1 : prev));
   };

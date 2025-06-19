@@ -417,6 +417,31 @@ const upsertStageInfo = async (req, res) => {
   }
 };
 
+const updateRecruitmentSessionStatus = async (req, res) => {
+  const { id } = req.params;
+  const { is_active } = req.body;
+
+  try {
+    if (is_active) {
+      // Nonaktifkan semua sesi lain
+      await recruitment_sessions.update({ is_active: false }, { where: {} });
+    }
+
+    // Update status sesi ini
+    await recruitment_sessions.update(
+      { is_active },
+      { where: { id } }
+    );
+
+    res.json({ message: 'Status sesi diperbarui' });
+  } catch (err) {
+    console.error('Gagal update status sesi:', err);
+    res.status(500).json({ message: 'Gagal update status sesi' });
+  }
+};
+
+
+
 
 
 module.exports = {
@@ -428,5 +453,6 @@ module.exports = {
   updateStageStatus,
   resetParticipantStatus,
   getStageInfo,
-  upsertStageInfo
+  upsertStageInfo,
+  updateRecruitmentSessionStatus
 };
