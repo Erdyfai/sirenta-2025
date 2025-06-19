@@ -112,7 +112,7 @@ const fs = require('fs');
         return res.status(500).json({ message: 'Stage pendaftaran tidak ditemukan.' });
       }
 
-      if (registrationStage.status === 'completed' && !registered) {
+      if (registrationStage.status !== 'active' && !registered) {
         return res.json({ state: 'registration closed', message: 'Pendaftaran telah ditutup.' });
       }
       
@@ -206,9 +206,6 @@ const fs = require('fs');
       return res.status(500).json({ message: 'Terjadi kesalahan pada server.' });
     }
   };
-  
-  
-
 
   module.exports = {profile, progress, dashboardStatus, registeredUser};
 

@@ -169,6 +169,22 @@ resetStageParticipants: async (stageId) => {
     }
   },
 
+  updateRecruitmentSessionStatus: async (sessionId, isActive) => {
+    try {
+      await api.patch(`/admin/update/recruitment-sessions/${sessionId}/status`, {
+        is_active: isActive,
+      });
+  
+      // Fetch ulang saja biar state terupdate
+      await get().fetchRecruitmentSessions();
+    } catch (err) {
+      console.error('Gagal update status sesi:', err);
+      throw err;
+    }
+  },
+  
+  
+
   // Reset
   clearUsersInStage: () => set({ usersInStage: [] }),
 }));

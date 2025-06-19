@@ -48,6 +48,23 @@ export default function KelolaSesi() {
     navigate(`/admin/kelola-sesi/${sesi.id}/${tahap.id}`);
   };
 
+  const handleToggleStatus = async (sessionId, isCurrentlyActive) => {
+    try {
+      if (!isCurrentlyActive) {
+        await useAdminStore.getState().updateRecruitmentSessionStatus(sessionId, true); 
+      } else {
+        await useAdminStore.getState().updateRecruitmentSessionStatus(sessionId, false); 
+      }
+  
+      toast.success(`Sesi berhasil di${!isCurrentlyActive ? 'aktifkan' : 'nonaktifkan'}`);
+      fetchRecruitmentSessions(); // refresh ulang
+    } catch (err) {
+      console.error('Gagal toggle status sesi:', err);
+      toast.error('Gagal mengubah status sesi');
+    }
+  };
+  
+
   const handleHapusSesi = () => {
     // TODO: implementasi delete menggunakan API
   };
@@ -82,29 +99,33 @@ export default function KelolaSesi() {
     {
       header: 'Status',
       accessor: 'status',
-      render: (row) => {
-        const status = row.stages?.some((t) => t.status === 'active');
-        return <span className={status ? 'text-green-600 font-semibold' : 'text-red-500 font-semibold'}>
-          {status ? 'Open' : 'Close'}
-        </span>;
-      },
-    },
-    {
-      header: 'Dimulai Pada',
-      accessor: 'started_at',
-      render: (row) => new Date(row.started_at).toLocaleDateString('id-ID'),
+      render: (row) => (
+        <span className={row.is_active ? 'text-green-600 font-semibold' : 'text-red-500 font-semibold'}>
+          {row.is_active ? 'Open' : 'Close'}
+        </span>
+      ),
     },
     {
       header: 'Aksi',
       accessor: 'aksi',
       render: (row) => (
-        <div className="flex gap-2">
-          <button className="btn btn-xs btn-soft btn-warning" onClick={() => handleEditSesi(row)}>
-            Edit
-          </button>
-          <button className="btn btn-xs btn-soft btn-error" onClick={handleHapusSesi}>
-            Hapus
-          </button>
+        <div className="flex flex-col gap-2">
+          <div className="flex gap-2">
+            <button className="btn btn-xs btn-soft btn-warning" onClick={() => handleEditSesi(row)}>
+              Edit
+            </button>
+            <button className="btn btn-xs btn-soft btn-error" onClick={handleHapusSesi}>
+              Hapus
+            </button>
+          </div>
+          <div className="flex gap-2">
+            <button
+              className="btn btn-x btn-soft btn-success"
+              onClick={() => handleToggleStatus(row.id, row.is_active)}
+            >
+              {row.is_active ? 'Nonaktifkan' : 'Aktifkan'}
+            </button>
+          </div>
         </div>
       ),
     },

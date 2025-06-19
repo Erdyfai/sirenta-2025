@@ -1,6 +1,6 @@
 const express = require('express');
 const { protectRoute } = require('../middleware/auth.middleware.js');
-const { getRecruitmentSessions, getUsersByStage, createRecruitmentSession, updateRecruitmentSession, updateUserProgress, updateStageStatus, resetParticipantStatus, getStageInfo, upsertStageInfo } = require('../controllers/admin.controller.js');
+const { getRecruitmentSessions, getUsersByStage, createRecruitmentSession, updateRecruitmentSession, updateUserProgress, updateStageStatus, resetParticipantStatus, getStageInfo, upsertStageInfo, updateRecruitmentSessionStatus } = require('../controllers/admin.controller.js');
 
 const router = express.Router();
 
@@ -18,5 +18,5 @@ router.put('/update/stages/:id/status', protectRoute([ROLE]), updateStageStatus)
 router.put('/update/user-progress/:id/reset-status', protectRoute([ROLE]), resetParticipantStatus);
 
 router.patch('/update/user-progress/:user_id/:stage_id', protectRoute([ROLE]), updateUserProgress);
-
+router.patch('/update/recruitment-sessions/:id/status', protectRoute([ROLE]), updateRecruitmentSessionStatus);
 module.exports = router;
